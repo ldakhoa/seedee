@@ -9,12 +9,7 @@ jobs:
   test:
     name: Swift-macOS
     runs-on: macOS-latest
-    strategy:
-      matrix:
-        include:
-          - os: macOS-latest
-          - name: swift-macOS
-
+    
     steps:
       - name: Checkout
         uses: actions/checkout@v3
