@@ -6,7 +6,7 @@ on:
     pull_request:
       - main
 jobs:
-  build:
+  test:
     name: Swift-macOS
     runs-on: macos-12
 
@@ -18,14 +18,8 @@ jobs:
         with:
           xcode-version: '14.0.0'
       - name: Build
-      run: swift build -v
-      - name: Run unit tests
-      run: swift test -v
-
-  integration-test:
-    runs-on: macos-12
-    needs: build
-
-    steps:
+        run: swift build -v
+      - name: Unit tests
+        run: swift test -v
       - name: Integration Test
         run: sh scripts/integration_test_ios.sh
