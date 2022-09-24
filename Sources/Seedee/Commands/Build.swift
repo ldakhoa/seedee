@@ -12,11 +12,3 @@ struct Build: ParsableCommand {
         print("build command with \(options.buildForTesting)")
     }
 }
-
-struct Options: ParsableArguments {
-    @Flag(name: [.long], help: "")
-    var buildForTesting: Bool = false
-    
-    @Flag(name: [.long], help: "")
-    var testWithoutBuilding: Bool = false
-}
