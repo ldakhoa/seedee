@@ -7,8 +7,8 @@ on:
       - main
 jobs:
   test:
-    name: ${{ matrix.name }}
-    runs-on: ${{ matrix.os }}
+    name: Swift-macOS
+    runs-on: macOS-latest
     strategy:
       matrix:
         include:
