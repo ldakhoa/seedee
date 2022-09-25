@@ -8,7 +8,7 @@ jobs:
       - checkout
       - run:
           name: Exec integration test
-          command: make install test.integration.ios
+          command: make test.integration.ios
 
 workflows:
   version: 2
