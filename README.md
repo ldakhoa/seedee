@@ -16,6 +16,6 @@
 
 ## Providers support
 
-- [ ] Github Actions
+- [ ] GitHub Actions
 - [ ] GitLab
 - [ ] CircleCI
