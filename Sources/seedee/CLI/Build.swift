@@ -1,3 +1,4 @@
+import Foundation
 import ArgumentParser
 
 struct Build: ParsableCommand {
@@ -8,7 +9,11 @@ struct Build: ParsableCommand {
     @OptionGroup var options: Options
     
     func run() throws {
+        let projectMetadata = ProjectMetadata()
         print("Run build command")
-        print("build command with \(options.buildForTesting)")
+
+        print(projectMetadata.xcodeprojPath)
+        print(projectMetadata.projectName!)
+        print(projectMetadata.xcworkspacePath!)
     }
 }
