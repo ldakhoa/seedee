@@ -5,7 +5,7 @@ import ArgumentParser
 
 final class SeedeeTests: XCTestCase {
     
-    func test_seedee_help() throws {
+    func testSeedee_Help() throws {
         let helpText = """
         OVERVIEW: A Swift CLI tool to make your CI/CD easier
 
