@@ -1,5 +1,4 @@
 import Foundation
-import Commands
 
 protocol XCBAction {
     func run(argument: String)
