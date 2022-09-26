@@ -39,12 +39,28 @@ struct XCBCmdMaker: CmdMaker {
 }
 
 struct TeeCmdMaker: CmdMaker {
+    private let metadata: Metadata
+    private let argument: String
+    
+    init(metadata: Metadata, argument: String) {
+        self.metadata = metadata
+        self.argument = argument
+    }
+    
     func make() -> [String]? {
         []
     }
 }
 
 struct LogCmdMaker: CmdMaker {
+    private let metadata: Metadata
+    private let argument: String
+    
+    init(metadata: Metadata, argument: String) {
+        self.metadata = metadata
+        self.argument = argument
+    }
+    
     func make() -> [String]? {
         []
     }

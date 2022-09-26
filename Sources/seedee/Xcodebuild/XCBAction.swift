@@ -8,7 +8,9 @@ extension XCBAction {
     func run(argument: String) {
         let metadata = Metadata()
         let makers: [CmdMaker] = [
-            XCBCmdMaker(metadata: metadata, argument: argument)
+            XCBCmdMaker(metadata: metadata, argument: argument),
+            TeeCmdMaker(metadata: metadata, argument: argument),
+            LogCmdMaker(metadata: metadata, argument: argument)
         ]
         
         makers.forEach {
