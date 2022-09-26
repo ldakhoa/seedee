@@ -27,7 +27,8 @@ extension XCBAction {
         }
         
         do {
-            try SeedeeProcess.shared.run(commands)
+            let output = try SeedeeProcess.shared.run(commands)
+            print(output)
         } catch {
             print(error.localizedDescription)
         }

@@ -4,7 +4,7 @@
 
 ## Main features
 
-- [ ] Build
+- [x] Build
 - [ ] Test
   - [ ] Test without building
 - [ ] Custom scripts
