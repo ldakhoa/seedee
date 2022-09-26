@@ -2,10 +2,8 @@ import Foundation
 import Glob
 import ColorizeSwift
 
-struct ProjectMetadata {
+struct Metadata {
     private let fileManager = FileManager.default
-    
-    private let xcodeprojExtension = ".xcodeproj"
     
     var xcodeprojPath: String {
         let files = Glob(pattern: "*.xcodeproj")
@@ -25,7 +23,9 @@ struct ProjectMetadata {
     }
     
     var projectName: String? {
-        URL(string: xcodeprojPath)?.deletingPathExtension().lastPathComponent
+        URL(string: xcodeprojPath)?
+            .deletingPathExtension()
+            .lastPathComponent
     }
     
     var schemes: [String] {
