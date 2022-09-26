@@ -1,4 +1,5 @@
 import Foundation
+import Collections
 
 protocol CmdMaker {
     func make() -> [String]?
@@ -20,20 +21,28 @@ struct XCBCmdMaker: CmdMaker {
     }
     
     func make() -> [String]? {
-        let defaultDestination = "platform-iOS Simulator,name=iPhone 11"
-        
-        let xcbArguments: [String: Any] = [
+        let defaultDestination = "\'platform=iOS Simulator,name=iPhone 11\'"
+        let xcbArguments: OrderedDictionary<String, String> = [
             "derivedDataPath": "",
             "xctestrun": "",
             "workspace": metadata.xcworkspacePath ?? "",
-            "scheme": "",
+            "scheme": metadata.scheme ?? "",
             "project": "",
             "target": "",
             "configuration": "",
             "sdk": "",
             "destination": defaultDestination
         ]
-        return []
+        
+        var commands = "xcodebuild build"
+        
+        for (key, value) in xcbArguments {
+            if value.isEmpty { continue }
+            commands += " -\(key)" + " \(value)"
+        }
+        
+        // TODO: Handle clean, xcargs
+        return [commands]
     }
 }
 

@@ -1,4 +1,5 @@
 import Foundation
+import Commands
 
 protocol XCBAction {
     func run(argument: String)
@@ -13,8 +14,23 @@ extension XCBAction {
             LogCmdMaker(metadata: metadata, argument: argument)
         ]
         
+        var commands = ""
+        
         makers.forEach {
-            print($0.make() ?? "")
+            guard
+                let strMakes = $0.make(),
+                !strMakes.isEmpty
+            else {
+                return
+            }
+            
+            commands += strMakes[0]
+        }
+        
+        do {
+            try SeedeeProcess.shared.run(commands)
+        } catch {
+            print(error.localizedDescription)
         }
     }
 }
