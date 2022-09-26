@@ -33,7 +33,6 @@ struct XCBCmdMaker: CmdMaker {
             "sdk": "",
             "destination": defaultDestination
         ]
-        
         return []
     }
 }
