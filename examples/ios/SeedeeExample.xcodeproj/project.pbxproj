@@ -8,16 +8,40 @@
 
 /* Begin PBXBuildFile section */
 		4613398BD2BF298CC63255D3 /* Pods_SeedeeExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 521911F0BF5D1B0BDA9456AC /* Pods_SeedeeExample.framework */; };
+		5851A0C5399066C756BB2634 /* Pods_SeedeeExampleUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 418C97D266CE1D4DA41796CE /* Pods_SeedeeExampleUITests.framework */; };
 		6A72360828DF845900F9E07F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A72360728DF845900F9E07F /* AppDelegate.swift */; };
 		6A72360A28DF845900F9E07F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A72360928DF845900F9E07F /* SceneDelegate.swift */; };
 		6A72360C28DF845900F9E07F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A72360B28DF845900F9E07F /* ViewController.swift */; };
 		6A72360F28DF845900F9E07F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A72360D28DF845900F9E07F /* Main.storyboard */; };
 		6A72361128DF845B00F9E07F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6A72361028DF845B00F9E07F /* Assets.xcassets */; };
 		6A72361428DF845B00F9E07F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A72361228DF845B00F9E07F /* LaunchScreen.storyboard */; };
+		6A9DFA3728E37C2800AF6056 /* SeedeeExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9DFA3628E37C2800AF6056 /* SeedeeExampleTests.swift */; };
+		6A9DFA4428E37C3000AF6056 /* SeedeeExampleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9DFA4328E37C3000AF6056 /* SeedeeExampleUITests.swift */; };
+		D4FBAA13DA6E5287B130CF8A /* Pods_SeedeeExampleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04CD6C3ECDBD6F980E68DD07 /* Pods_SeedeeExampleTests.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		6A9DFA3828E37C2800AF6056 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6A7235FC28DF845900F9E07F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6A72360328DF845900F9E07F;
+			remoteInfo = SeedeeExample;
+		};
+		6A9DFA4728E37C3000AF6056 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6A7235FC28DF845900F9E07F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6A72360328DF845900F9E07F;
+			remoteInfo = SeedeeExample;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		04CD6C3ECDBD6F980E68DD07 /* Pods_SeedeeExampleTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SeedeeExampleTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		0724AEA7951A7F9DBBFE945B /* Pods-SeedeeExampleUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SeedeeExampleUITests.debug.xcconfig"; path = "Target Support Files/Pods-SeedeeExampleUITests/Pods-SeedeeExampleUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		254E542ABD7614E3A79E9839 /* Pods-SeedeeExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SeedeeExample.debug.xcconfig"; path = "Target Support Files/Pods-SeedeeExample/Pods-SeedeeExample.debug.xcconfig"; sourceTree = "<group>"; };
+		418C97D266CE1D4DA41796CE /* Pods_SeedeeExampleUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SeedeeExampleUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		521911F0BF5D1B0BDA9456AC /* Pods_SeedeeExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SeedeeExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A72360428DF845900F9E07F /* SeedeeExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SeedeeExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A72360728DF845900F9E07F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -27,7 +51,14 @@
 		6A72361028DF845B00F9E07F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6A72361328DF845B00F9E07F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6A72361528DF845B00F9E07F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6A9DFA3428E37C2800AF6056 /* SeedeeExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SeedeeExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6A9DFA3628E37C2800AF6056 /* SeedeeExampleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeedeeExampleTests.swift; sourceTree = "<group>"; };
+		6A9DFA4128E37C3000AF6056 /* SeedeeExampleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SeedeeExampleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6A9DFA4328E37C3000AF6056 /* SeedeeExampleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeedeeExampleUITests.swift; sourceTree = "<group>"; };
+		71E89B30B4F326E2016E6FF4 /* Pods-SeedeeExampleUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SeedeeExampleUITests.release.xcconfig"; path = "Target Support Files/Pods-SeedeeExampleUITests/Pods-SeedeeExampleUITests.release.xcconfig"; sourceTree = "<group>"; };
 		771E232B34DFE04D10DD3BA1 /* Pods-SeedeeExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SeedeeExample.release.xcconfig"; path = "Target Support Files/Pods-SeedeeExample/Pods-SeedeeExample.release.xcconfig"; sourceTree = "<group>"; };
+		783FDC29D2C42D62AF8D6C2C /* Pods-SeedeeExampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SeedeeExampleTests.debug.xcconfig"; path = "Target Support Files/Pods-SeedeeExampleTests/Pods-SeedeeExampleTests.debug.xcconfig"; sourceTree = "<group>"; };
+		C528913BC332740523708A15 /* Pods-SeedeeExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SeedeeExampleTests.release.xcconfig"; path = "Target Support Files/Pods-SeedeeExampleTests/Pods-SeedeeExampleTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,6 +70,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6A9DFA3128E37C2800AF6056 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D4FBAA13DA6E5287B130CF8A /* Pods_SeedeeExampleTests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6A9DFA3E28E37C3000AF6056 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5851A0C5399066C756BB2634 /* Pods_SeedeeExampleUITests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -46,6 +93,8 @@
 			isa = PBXGroup;
 			children = (
 				6A72360628DF845900F9E07F /* SeedeeExample */,
+				6A9DFA3528E37C2800AF6056 /* SeedeeExampleTests */,
+				6A9DFA4228E37C3000AF6056 /* SeedeeExampleUITests */,
 				6A72360528DF845900F9E07F /* Products */,
 				FEAD1DEE178F35E2AD066E0A /* Pods */,
 				EFC0EE203F4A910EAAA7D0DB /* Frameworks */,
@@ -56,6 +105,8 @@
 			isa = PBXGroup;
 			children = (
 				6A72360428DF845900F9E07F /* SeedeeExample.app */,
+				6A9DFA3428E37C2800AF6056 /* SeedeeExampleTests.xctest */,
+				6A9DFA4128E37C3000AF6056 /* SeedeeExampleUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -74,10 +125,28 @@
 			path = SeedeeExample;
 			sourceTree = "<group>";
 		};
+		6A9DFA3528E37C2800AF6056 /* SeedeeExampleTests */ = {
+			isa = PBXGroup;
+			children = (
+				6A9DFA3628E37C2800AF6056 /* SeedeeExampleTests.swift */,
+			);
+			path = SeedeeExampleTests;
+			sourceTree = "<group>";
+		};
+		6A9DFA4228E37C3000AF6056 /* SeedeeExampleUITests */ = {
+			isa = PBXGroup;
+			children = (
+				6A9DFA4328E37C3000AF6056 /* SeedeeExampleUITests.swift */,
+			);
+			path = SeedeeExampleUITests;
+			sourceTree = "<group>";
+		};
 		EFC0EE203F4A910EAAA7D0DB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				521911F0BF5D1B0BDA9456AC /* Pods_SeedeeExample.framework */,
+				04CD6C3ECDBD6F980E68DD07 /* Pods_SeedeeExampleTests.framework */,
+				418C97D266CE1D4DA41796CE /* Pods_SeedeeExampleUITests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -87,8 +156,11 @@
 			children = (
 				254E542ABD7614E3A79E9839 /* Pods-SeedeeExample.debug.xcconfig */,
 				771E232B34DFE04D10DD3BA1 /* Pods-SeedeeExample.release.xcconfig */,
+				783FDC29D2C42D62AF8D6C2C /* Pods-SeedeeExampleTests.debug.xcconfig */,
+				C528913BC332740523708A15 /* Pods-SeedeeExampleTests.release.xcconfig */,
+				0724AEA7951A7F9DBBFE945B /* Pods-SeedeeExampleUITests.debug.xcconfig */,
+				71E89B30B4F326E2016E6FF4 /* Pods-SeedeeExampleUITests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -113,6 +185,44 @@
 			productReference = 6A72360428DF845900F9E07F /* SeedeeExample.app */;
 			productType = "com.apple.product-type.application";
 		};
+		6A9DFA3328E37C2800AF6056 /* SeedeeExampleTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6A9DFA3C28E37C2800AF6056 /* Build configuration list for PBXNativeTarget "SeedeeExampleTests" */;
+			buildPhases = (
+				F928ABE374C67A507347ED4A /* [CP] Check Pods Manifest.lock */,
+				6A9DFA3028E37C2800AF6056 /* Sources */,
+				6A9DFA3128E37C2800AF6056 /* Frameworks */,
+				6A9DFA3228E37C2800AF6056 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6A9DFA3928E37C2800AF6056 /* PBXTargetDependency */,
+			);
+			name = SeedeeExampleTests;
+			productName = SeedeeExampleTests;
+			productReference = 6A9DFA3428E37C2800AF6056 /* SeedeeExampleTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		6A9DFA4028E37C3000AF6056 /* SeedeeExampleUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6A9DFA4928E37C3000AF6056 /* Build configuration list for PBXNativeTarget "SeedeeExampleUITests" */;
+			buildPhases = (
+				0B75F2FBACF77A598CFC3ECF /* [CP] Check Pods Manifest.lock */,
+				6A9DFA3D28E37C3000AF6056 /* Sources */,
+				6A9DFA3E28E37C3000AF6056 /* Frameworks */,
+				6A9DFA3F28E37C3000AF6056 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6A9DFA4828E37C3000AF6056 /* PBXTargetDependency */,
+			);
+			name = SeedeeExampleUITests;
+			productName = SeedeeExampleUITests;
+			productReference = 6A9DFA4128E37C3000AF6056 /* SeedeeExampleUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -125,6 +235,14 @@
 				TargetAttributes = {
 					6A72360328DF845900F9E07F = {
 						CreatedOnToolsVersion = 14.0;
+					};
+					6A9DFA3328E37C2800AF6056 = {
+						CreatedOnToolsVersion = 14.0;
+						TestTargetID = 6A72360328DF845900F9E07F;
+					};
+					6A9DFA4028E37C3000AF6056 = {
+						CreatedOnToolsVersion = 14.0;
+						TestTargetID = 6A72360328DF845900F9E07F;
 					};
 				};
 			};
@@ -142,6 +260,8 @@
 			projectRoot = "";
 			targets = (
 				6A72360328DF845900F9E07F /* SeedeeExample */,
+				6A9DFA3328E37C2800AF6056 /* SeedeeExampleTests */,
+				6A9DFA4028E37C3000AF6056 /* SeedeeExampleUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -157,9 +277,45 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6A9DFA3228E37C2800AF6056 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6A9DFA3F28E37C3000AF6056 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		0B75F2FBACF77A598CFC3ECF /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SeedeeExampleUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		9CF2D7FEA9D95845387E5C8C /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -182,6 +338,28 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		F928ABE374C67A507347ED4A /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SeedeeExampleTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -195,7 +373,36 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6A9DFA3028E37C2800AF6056 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6A9DFA3728E37C2800AF6056 /* SeedeeExampleTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6A9DFA3D28E37C3000AF6056 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6A9DFA4428E37C3000AF6056 /* SeedeeExampleUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		6A9DFA3928E37C2800AF6056 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6A72360328DF845900F9E07F /* SeedeeExample */;
+			targetProxy = 6A9DFA3828E37C2800AF6056 /* PBXContainerItemProxy */;
+		};
+		6A9DFA4828E37C3000AF6056 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6A72360328DF845900F9E07F /* SeedeeExample */;
+			targetProxy = 6A9DFA4728E37C3000AF6056 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		6A72360D28DF845900F9E07F /* Main.storyboard */ = {
@@ -339,7 +546,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 5SB3H4Y5NS;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SeedeeExample/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -368,7 +575,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 5SB3H4Y5NS;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SeedeeExample/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -389,6 +596,80 @@
 			};
 			name = Release;
 		};
+		6A9DFA3A28E37C2800AF6056 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 783FDC29D2C42D62AF8D6C2C /* Pods-SeedeeExampleTests.debug.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ldakhoa.SeedeeExampleTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SeedeeExample.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SeedeeExample";
+			};
+			name = Debug;
+		};
+		6A9DFA3B28E37C2800AF6056 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = C528913BC332740523708A15 /* Pods-SeedeeExampleTests.release.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ldakhoa.SeedeeExampleTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SeedeeExample.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SeedeeExample";
+			};
+			name = Release;
+		};
+		6A9DFA4A28E37C3000AF6056 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0724AEA7951A7F9DBBFE945B /* Pods-SeedeeExampleUITests.debug.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ldakhoa.SeedeeExampleUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = SeedeeExample;
+			};
+			name = Debug;
+		};
+		6A9DFA4B28E37C3000AF6056 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 71E89B30B4F326E2016E6FF4 /* Pods-SeedeeExampleUITests.release.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ldakhoa.SeedeeExampleUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = SeedeeExample;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -406,6 +687,24 @@
 			buildConfigurations = (
 				6A72361928DF845B00F9E07F /* Debug */,
 				6A72361A28DF845B00F9E07F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6A9DFA3C28E37C2800AF6056 /* Build configuration list for PBXNativeTarget "SeedeeExampleTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6A9DFA3A28E37C2800AF6056 /* Debug */,
+				6A9DFA3B28E37C2800AF6056 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6A9DFA4928E37C3000AF6056 /* Build configuration list for PBXNativeTarget "SeedeeExampleUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6A9DFA4A28E37C3000AF6056 /* Debug */,
+				6A9DFA4B28E37C3000AF6056 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
