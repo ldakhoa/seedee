@@ -16,7 +16,7 @@ struct Metadata {
         let files = Glob(pattern: "\(path)/*\(fileExtension.xcodeproj)")
         
         if files.count > 1 {
-            print("warning:".bold().yellow(), "Multiple xcode projects are detected")
+            Logger.shared.log(type: .warning, message: "Multiple Xcode projects are detected")
         }
         
         return lastFileName(files: files)[0]
