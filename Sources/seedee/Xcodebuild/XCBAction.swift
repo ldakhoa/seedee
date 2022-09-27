@@ -32,7 +32,7 @@ extension XCBAction {
             let output = try SeedeeProcess.shared.run(commands)
             print(output)
         } catch {
-            print(error.localizedDescription)
+            Logger.shared.log(type: .error, message: error.localizedDescription)
         }
     }
 }
