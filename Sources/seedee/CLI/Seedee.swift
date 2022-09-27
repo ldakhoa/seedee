@@ -4,7 +4,7 @@ import ArgumentParser
 public struct Seedee: ParsableCommand {
     public static let configuration = CommandConfiguration(
         abstract: "A Swift CLI tool to make your CI/CD easier",
-        version: "1.0.0",
+        version: "0.0.1",
         subcommands: [
             Build.self,
             Test.self
