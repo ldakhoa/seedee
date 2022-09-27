@@ -26,6 +26,8 @@ extension XCBAction {
             commands += strMakes[0]
         }
         
+        Logger.shared.log(type: .info, message: commands)
+        
         do {
             let output = try SeedeeProcess.shared.run(commands)
             print(output)
