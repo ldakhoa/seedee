@@ -1,8 +1,13 @@
-//
-//  File.swift
-//  
-//
-//  Created by Khoa Le on 28/09/2022.
-//
-
 import Foundation
+
+final class XCBTestAction: XCBAction {
+    override func run(argument: Args) {
+        super.run(argument: argument)
+    }
+    
+    // MARK: - Private
+    
+    func xcresultPaths() {
+        
+    }
+}

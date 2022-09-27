@@ -13,9 +13,9 @@ extension CmdMaker {
 
 struct XCBCmdMaker: CmdMaker {
     private let metadata: Metadata
-    private let argument: String
+    private let argument: Args
     
-    init(metadata: Metadata, argument: String) {
+    init(metadata: Metadata, argument: Args) {
         self.metadata = metadata
         self.argument = argument
     }
@@ -34,7 +34,7 @@ struct XCBCmdMaker: CmdMaker {
             "destination": defaultDestination
         ]
         
-        var commands = "xcodebuild build"
+        var commands = "xcodebuild"
         
         for (key, value) in xcbArguments {
             if value.isEmpty { continue }
@@ -48,9 +48,9 @@ struct XCBCmdMaker: CmdMaker {
 
 struct TeeCmdMaker: CmdMaker {
     private let metadata: Metadata
-    private let argument: String
+    private let argument: Args
     
-    init(metadata: Metadata, argument: String) {
+    init(metadata: Metadata, argument: Args) {
         self.metadata = metadata
         self.argument = argument
     }
@@ -62,9 +62,9 @@ struct TeeCmdMaker: CmdMaker {
 
 struct LogCmdMaker: CmdMaker {
     private let metadata: Metadata
-    private let argument: String
+    private let argument: Args
     
-    init(metadata: Metadata, argument: String) {
+    init(metadata: Metadata, argument: Args) {
         self.metadata = metadata
         self.argument = argument
     }

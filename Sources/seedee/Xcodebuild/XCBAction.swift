@@ -1,11 +1,11 @@
 import Foundation
 
-protocol XCBAction {
-    func run(argument: String)
+protocol XCBActionProtocol {
+    func run(argument: Args)
 }
 
-extension XCBAction {
-    func run(argument: String) {
+class XCBAction: XCBActionProtocol {
+    func run(argument: Args) {
         let metadata = Metadata()
         let makers: [CmdMaker] = [
             XCBCmdMaker(metadata: metadata, argument: argument),
@@ -36,7 +36,3 @@ extension XCBAction {
         }
     }
 }
-
-struct XCBBuildAction: XCBAction {}
-
-struct XCBTestAction: XCBAction {}

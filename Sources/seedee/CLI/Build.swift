@@ -10,6 +10,7 @@ struct Build: ParsableCommand {
     
     func run() throws {
         let runner = XCBBuildRunner()
-        runner.run(argument: "")
+        let args = Args()
+        runner.run(argument: args)
     }
 }

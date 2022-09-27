@@ -1,8 +1,5 @@
-//
-//  File.swift
-//  
-//
-//  Created by Khoa Le on 28/09/2022.
-//
-
 import Foundation
+
+final class XCBBuildAction: XCBAction {
+    override func run(argument: Args) {}
+}

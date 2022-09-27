@@ -1,11 +1,11 @@
 import Foundation
 
 struct XCBTestRunner: XCBRunner {
-    func run(argument: String) {
+    func run(argument: Args) {
         action().run(argument: argument)
     }
     
-    func action() -> XCBAction {
+    func action() -> XCBActionProtocol {
         XCBTestAction()
     }
 }
