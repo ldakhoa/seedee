@@ -2,28 +2,23 @@ import Foundation
 import Glob
 
 final class XCBTestAction: XCBAction {
-    
-    private var arguments: Arguments?
-    
     override func run(arguments: Arguments) {
         if arguments.derivedDataPath?.isEmpty ?? true {
             arguments.derivedDataPath = "DerivedData"
         }
         super.run(arguments: arguments)
-    }
-    
-    // MARK: - Private
-    
-    func xcresultPaths() {
-        // TODO: Implement this
-        guard let arguments = arguments else { return }
-        if arguments.derivedDataPath?.isEmpty ?? true {
-            arguments.derivedDataPath = "DerivedData"
+        
+        // TODO: Handle multiple xcresult bundles
+        let files = Glob(pattern: "\(arguments.derivedDataPath ?? "")/Logs/Test/*.xcresult")
+        let paths = files.compactMap {
+            URL(string: $0)?
+                .lastPathComponent
         }
         
-        let files = Glob(pattern: "\(arguments.derivedDataPath ?? "")/Logs/Test/*.xcresult")
-        files.forEach {
-            print("> DD: ", $0 as String)
+        if paths.isEmpty {
+            Logger.shared.log(type: .error, message: "Cannot detect any xcresult bundle")
         }
+       
+        Logger.shared.log(type: .info, message: "Detected xcresult bundles: \(paths)")
     }
 }
