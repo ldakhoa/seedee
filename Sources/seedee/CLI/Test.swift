@@ -4,12 +4,16 @@ struct Test: ParsableCommand {
     static var configuration = CommandConfiguration(abstract: "Test the project")
     
     @Flag(name: .shortAndLong, help: "Test without build the project")
-    var testWithoutBuild = false
+    var testWithoutBuilding = false
     
     func run() throws {
-        print("Run test command")
         let runner = XCBTestRunner()
-        let args = Args()
-        runner.run(argument: args)
+        let args = Arguments()
+        
+        if args.actions?.isEmpty ?? true {
+            args.actions = testWithoutBuilding ? ["test-without-building"] : ["test"]
+        }
+        
+        runner.run(arguments: args)
     }
 }

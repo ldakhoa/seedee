@@ -38,7 +38,7 @@ final class Logger {
     }
     
     func log(type: LoggerType, message: String) {
-        let str = makeColor(type: type, message: "[\(currentTime)] [\(type.description)] $\(message)")
+        let str = makeColor(type: type, message: "[\(currentTime)] [\(type.description)] \(message)")
         print(str)
     }
     

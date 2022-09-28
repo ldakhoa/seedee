@@ -13,17 +13,17 @@ extension CmdMaker {
 
 struct XCBCmdMaker: CmdMaker {
     private let metadata: Metadata
-    private let argument: Args
+    private let arguments: Arguments
     
-    init(metadata: Metadata, argument: Args) {
+    init(metadata: Metadata, arguments: Arguments) {
         self.metadata = metadata
-        self.argument = argument
+        self.arguments = arguments
     }
     
     func make() -> [String]? {
         let defaultDestination = "\'platform=iOS Simulator,name=iPhone 11\'"
         let xcbArguments: OrderedDictionary<String, String> = [
-            "derivedDataPath": "",
+            "derivedDataPath": arguments.derivedDataPath ?? "",
             "xctestrun": "",
             "workspace": metadata.xcworkspacePath ?? "",
             "scheme": metadata.scheme ?? "",
@@ -34,7 +34,11 @@ struct XCBCmdMaker: CmdMaker {
             "destination": defaultDestination
         ]
         
-        var commands = "xcodebuild"
+        guard let actions = arguments.actions?.joined(separator: " ") else { return nil }
+
+        var commands = "set -o pipefail && "
+        commands += "xcodebuild "
+        commands += actions
         
         for (key, value) in xcbArguments {
             if value.isEmpty { continue }
@@ -48,11 +52,11 @@ struct XCBCmdMaker: CmdMaker {
 
 struct TeeCmdMaker: CmdMaker {
     private let metadata: Metadata
-    private let argument: Args
+    private let arguments: Arguments
     
-    init(metadata: Metadata, argument: Args) {
+    init(metadata: Metadata, arguments: Arguments) {
         self.metadata = metadata
-        self.argument = argument
+        self.arguments = arguments
     }
     
     func make() -> [String]? {
@@ -62,11 +66,11 @@ struct TeeCmdMaker: CmdMaker {
 
 struct LogCmdMaker: CmdMaker {
     private let metadata: Metadata
-    private let argument: Args
+    private let arguments: Arguments
     
-    init(metadata: Metadata, argument: Args) {
+    init(metadata: Metadata, arguments: Arguments) {
         self.metadata = metadata
-        self.argument = argument
+        self.arguments = arguments
     }
     
     func make() -> [String]? {

@@ -1,16 +1,16 @@
 import Foundation
 
-protocol XCBActionProtocol {
-    func run(argument: Args)
+protocol XCBActivity {
+    func run(arguments: Arguments)
 }
 
-class XCBAction: XCBActionProtocol {
-    func run(argument: Args) {
+class XCBAction: XCBActivity {
+    func run(arguments: Arguments) {
         let metadata = Metadata()
         let makers: [CmdMaker] = [
-            XCBCmdMaker(metadata: metadata, argument: argument),
-            TeeCmdMaker(metadata: metadata, argument: argument),
-            LogCmdMaker(metadata: metadata, argument: argument)
+            XCBCmdMaker(metadata: metadata, arguments: arguments),
+            LogCmdMaker(metadata: metadata, arguments: arguments),
+            TeeCmdMaker(metadata: metadata, arguments: arguments)
         ]
         
         var commands = ""
@@ -26,7 +26,7 @@ class XCBAction: XCBActionProtocol {
             commands += strMakes[0]
         }
         
-        Logger.shared.log(type: .info, message: commands)
+        Logger.shared.log(type: .info, message: "$ \(commands)")
         
         do {
             let output = try SeedeeProcess.shared.run(commands)

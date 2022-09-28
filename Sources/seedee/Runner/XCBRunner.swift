@@ -1,6 +1,6 @@
 import Foundation
 
 protocol XCBRunner {
-    func run(argument: Args)
-    func action() -> XCBActionProtocol
+    func run(arguments: Arguments)
+    func action() -> XCBActivity
 }

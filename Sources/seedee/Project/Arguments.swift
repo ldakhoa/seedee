@@ -1,16 +1,16 @@
 import Foundation
 
-struct Args {
-    let xctestrun: String?
-    let workspace: String?
-    let scheme: String?
-    let project: String?
-    let target: String?
-    let actions: [String]?
-    let sdk: String?
-    let derivedDataPath: String?
-    let configuration: String?
-    let destination: String?
+final class Arguments {
+    var xctestrun: String?
+    var workspace: String?
+    var scheme: String?
+    var project: String?
+    var target: String?
+    var actions: [String]?
+    var sdk: String?
+    var derivedDataPath: String?
+    var configuration: String?
+    var destination: String?
     
     init(
         xctestrun: String? = nil,
