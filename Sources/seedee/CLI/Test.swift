@@ -8,12 +8,21 @@ struct Test: ParsableCommand {
     
     func run() throws {
         let runner = XCBTestRunner()
+        let stepper = Stepper()
+        
         let args = Arguments()
         
         if args.actions?.isEmpty ?? true {
             args.actions = testWithoutBuilding ? ["test-without-building"] : ["test"]
         }
         
-        runner.run(arguments: args)
+        stepper.step(type: .preRun) {
+            print("Install dependencies")
+        }
+        
+        stepper.step(type: .run) {
+            runner.run(arguments: args)
+        }
+        
     }
 }

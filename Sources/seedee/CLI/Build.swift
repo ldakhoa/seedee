@@ -10,6 +10,8 @@ struct Build: ParsableCommand {
     func run() throws {
         let runner = XCBBuildRunner()
         let arguments = Arguments()
+        let stepper = Stepper()
+        
         if arguments.actions?.isEmpty ?? true {
             arguments.actions = buildForTesting ? ["build-for-testing"] : ["build"]
         }
@@ -18,6 +20,12 @@ struct Build: ParsableCommand {
             arguments.derivedDataPath = "DerivedData"
         }
         
-        runner.run(arguments: arguments)
+        stepper.step(type: .preRun) {
+            print("Install dependencies")
+        }
+        
+        stepper.step(type: .run) {
+            runner.run(arguments: arguments)
+        }
     }
 }

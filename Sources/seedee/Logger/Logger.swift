@@ -1,31 +1,7 @@
 import Foundation
-import os
 import ColorizeSwift
 
 final class Logger {
-    enum LoggerType: CustomStringConvertible {
-        case debug
-        case info
-        case warning
-        case error
-        case critical
-        
-        var description: String {
-            switch self {
-            case .debug:
-                return "DEBUG"
-            case .info:
-                return "INFO"
-            case .warning:
-                return "WARNING"
-            case .error:
-                return "ERROR"
-            case .critical:
-                return "CRITICAL"
-            }
-        }
-    }
-    
     static let shared = Logger()
     
     var currentTime: String {
@@ -54,6 +30,31 @@ final class Logger {
             return message.red()
         case .critical:
             return message.bold().red()
+        }
+    }
+}
+
+extension Logger {
+    enum LoggerType: CustomStringConvertible {
+        case debug
+        case info
+        case warning
+        case error
+        case critical
+        
+        var description: String {
+            switch self {
+            case .debug:
+                return "DEBUG"
+            case .info:
+                return "INFO"
+            case .warning:
+                return "WARNING"
+            case .error:
+                return "ERROR"
+            case .critical:
+                return "CRITICAL"
+            }
         }
     }
 }
