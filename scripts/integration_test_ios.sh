@@ -3,12 +3,13 @@ set -e
 
 cd examples/ios
 
-pod install
+bundle install
 
 swift run seedee build \
+    --derived-data-path DerivedData \
     --cocoapods \
     --build-for-testing
     
 swift run seedee test \
-    --cocoapods \
+    --derived-data-path DerivedData \
     --test-without-building
