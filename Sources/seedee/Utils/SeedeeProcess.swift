@@ -4,9 +4,13 @@ final class SeedeeProcess {
     static let shared = SeedeeProcess()
     
     @discardableResult
-    func run(_ command: String) throws -> String {
+    func run(_ command: String, logCommand: Bool = false) throws -> String {
         let task = Process()
         let pipe = Pipe()
+        
+        if logCommand {
+            Logger.shared.log(type: .info, message: "$ \(command)")
+        }
         
         task.standardOutput = pipe
         task.standardError = pipe

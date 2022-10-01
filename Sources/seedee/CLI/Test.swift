@@ -5,9 +5,14 @@ struct Test: ParsableCommand {
     
     @Flag(name: .shortAndLong, help: "Test without build the project")
     var testWithoutBuilding = false
+
+    @Flag(name: .shortAndLong, help: "Run pod install beforehand")
+    var cocoapods = false
     
     func run() throws {
         let runner = XCBTestRunner()
+        let podsRunner = CocoaPodsRunner()
+        
         let stepper = Stepper()
         
         let args = Arguments()
@@ -16,8 +21,10 @@ struct Test: ParsableCommand {
             args.actions = testWithoutBuilding ? ["test-without-building"] : ["test"]
         }
         
-        stepper.step(type: .preRun) {
-            print("Install dependencies")
+        if cocoapods {
+            stepper.step(type: .preRun) {
+                podsRunner.prepareCocoaPods(options: .install)
+            }
         }
         
         stepper.step(type: .run) {

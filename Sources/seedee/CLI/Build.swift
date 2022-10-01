@@ -7,8 +7,13 @@ struct Build: ParsableCommand {
     @Flag(name: .shortAndLong, help: "Build for testing")
     var buildForTesting = false
     
+    @Flag(name: .shortAndLong, help: "Run pod install beforehand")
+    var cocoapods = false
+    
     func run() throws {
         let runner = XCBBuildRunner()
+        let podsRunner = CocoaPodsRunner()
+        
         let arguments = Arguments()
         let stepper = Stepper()
         
@@ -20,10 +25,12 @@ struct Build: ParsableCommand {
             arguments.derivedDataPath = "DerivedData"
         }
         
-        stepper.step(type: .preRun) {
-            print("Install dependencies")
+        if cocoapods {
+            stepper.step(type: .preRun) {
+                podsRunner.prepareCocoaPods(options: .install)
+            }
         }
-        
+
         stepper.step(type: .run) {
             runner.run(arguments: arguments)
         }
