@@ -47,6 +47,39 @@ struct Metadata {
         return nil
     }
     
+    func defaultDerivedData() -> String? {
+        var cmd = "xcodebuild -showBuildSettings"
+        guard
+            let xcworkspacePath = xcworkspacePath,
+            let scheme = scheme
+        else {
+            return ""
+        }
+        
+        if xcworkspacePath.isEmpty {
+            cmd += " -workspace \(xcworkspacePath)"
+            cmd += " -scheme \(scheme)"
+        }
+        
+        do {
+            let content = try SeedeeShell.shared.run(cmd)
+            // search for /var/root/Library/Developer/Xcode/DerivedData/TargetName-abcxyz...
+            let range = NSRange(location: 0, length: content.count)
+            let result = try NSRegularExpression(pattern: "BUILD_ROOT = (.*)")
+                .matches(in: content, range: range)
+                .compactMap {
+                    Range($0.range, in: content)
+                        .flatMap {
+                            String(content[$0])
+                        }
+                }
+            return result[0]
+        } catch {
+            Logger.shared.log(type: .error, message: error.localizedDescription)
+            return nil
+        }
+    }
+    
     // MARK: - Private
     
     private var schemes: [String] {

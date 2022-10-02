@@ -2,7 +2,7 @@ import Foundation
 
 struct CocoaPodsRunner {
     private let metadata = Metadata()
-    private let shell = SeedeeProcess.shared
+    private let shell = SeedeeShell.shared
     
     func prepareCocoaPods(options: CocoaPodsOption) {
         switch options {

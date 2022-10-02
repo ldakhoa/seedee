@@ -3,9 +3,7 @@ import Glob
 
 final class XCBTestAction: XCBAction {
     override func run(arguments: Arguments) {
-        if arguments.derivedDataPath?.isEmpty ?? true {
-            arguments.derivedDataPath = "DerivedData"
-        }
+        arguments.derivedDataPath = derivedDataPath(arguments: arguments)
         super.run(arguments: arguments)
         
         // TODO: Handle multiple xcresult bundles
@@ -20,5 +18,12 @@ final class XCBTestAction: XCBAction {
         }
        
         Logger.shared.log(type: .info, message: "Detected xcresult bundles: \(paths)")
+    }
+    
+    private func derivedDataPath(arguments: Arguments) -> String {
+        guard let path = arguments.derivedDataPath else {
+            return metadata.defaultDerivedData() ?? "DerivedData"
+        }
+        return path
     }
 }

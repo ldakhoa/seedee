@@ -1,7 +1,7 @@
 import Foundation
 
-final class SeedeeProcess {
-    static let shared = SeedeeProcess()
+final class SeedeeShell {
+    static let shared = SeedeeShell()
     
     @discardableResult
     func run(_ command: String, logCommand: Bool = false) throws -> String {

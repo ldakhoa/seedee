@@ -15,7 +15,7 @@ final class Stepper {
         let prefix = "Step:"
 
         let start: DispatchTime = .now()
-        logger.log(type: .info, message: "⇣ \(prefix) \(type) (started)")
+        logger.log(type: .info, message: "\(prefix) \(type) (started)")
         
         worker()
         
@@ -24,7 +24,7 @@ final class Stepper {
         let timeInterval = Double(end.uptimeNanoseconds - start.uptimeNanoseconds) / 1_000_000_000
         let timeSpent = String(format: "%.1f", timeInterval)
 
-        logger.log(type: .info, message: "⇢ \(prefix) \(type) (finished) (\(timeSpent) s)")
+        logger.log(type: .info, message: "\(prefix) \(type) (finished) (\(timeSpent) s)")
     }
 }
 

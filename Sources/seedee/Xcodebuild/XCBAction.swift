@@ -5,8 +5,9 @@ protocol XCBActivity {
 }
 
 class XCBAction: XCBActivity {
+    let metadata = Metadata()
+    
     func run(arguments: Arguments) {
-        let metadata = Metadata()
         let makers: [CmdMaker] = [
             XCBCmdMaker(metadata: metadata, arguments: arguments),
             LogCmdMaker(metadata: metadata, arguments: arguments),
@@ -29,7 +30,7 @@ class XCBAction: XCBActivity {
         Logger.shared.log(type: .info, message: "$ \(commands)")
         
         do {
-            let output = try SeedeeProcess.shared.run(commands)
+            let output = try SeedeeShell.shared.run(commands)
             print(output)
         } catch {
             Logger.shared.log(type: .error, message: error.localizedDescription)
