@@ -65,15 +65,18 @@ struct Metadata {
             let content = try SeedeeShell.shared.run(cmd)
             // search for /var/root/Library/Developer/Xcode/DerivedData/TargetName-abcxyz...
             let range = NSRange(location: 0, length: content.count)
-            let result = try NSRegularExpression(pattern: "BUILD_ROOT = (.*)")
+            let buildRootString = try NSRegularExpression(pattern: "BUILD_ROOT = (.*)")
                 .matches(in: content, range: range)
                 .compactMap {
                     Range($0.range, in: content)
                         .flatMap {
                             String(content[$0])
                         }
-                }
-            return result[0]
+                }[0]
+            let lo = buildRootString.index(buildRootString.startIndex, offsetBy: 13)
+            let hi = buildRootString.index(buildRootString.startIndex, offsetBy: buildRootString.count)
+            let path = buildRootString[lo ..< hi]
+            return String(path)
         } catch {
             Logger.shared.log(type: .error, message: error.localizedDescription)
             return nil
