@@ -31,6 +31,10 @@ make test.integration.ios
 
 5. Commit changes and creat pull requests
 
+## Idea
+
+[iOS ToolKit written in Python](https://github.com/trinhngocthuyen/seeeye)
+
 ## License
 
 [MIT](https://github.com/ldakhoa/seedee/blob/main/LICENSE)
