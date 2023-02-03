@@ -1,10 +1,3 @@
-//
-//  File.swift
-//  
-//
-//  Created by Khoa Le on 03/02/2023.
-//
-
 import Foundation
 
 public protocol Action<Output> {
