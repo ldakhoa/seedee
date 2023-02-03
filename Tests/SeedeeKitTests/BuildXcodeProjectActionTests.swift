@@ -27,8 +27,11 @@ final class BuildXcodeProjectActionTests: XCTestCase {
         )
         let output = try await action.run()
 
-        let expectedOutput = "xcodebuild build -project testproject.xcodeproj -scheme testproject -destination generic/platform=iOS Simulator -configuration Debug CURRENT_PROJECT_VERSION=1.0.0"
-
+        let expectedOutput = """
+        xcodebuild build -project testproject.xcodeproj \\
+        -scheme testproject -destination generic/platform=iOS Simulator \\
+        -configuration Debug CURRENT_PROJECT_VERSION=1.0.0"
+        """
         XCTAssertEqual(output, expectedOutput)
     }
 }

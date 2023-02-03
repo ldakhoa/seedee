@@ -3,6 +3,7 @@ included:
   - Tests
 excluded:
   - .build
+  - Sources/Example
 disabled_rules:
   - function_parameter_count
   - force_try
