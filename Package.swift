@@ -43,8 +43,11 @@ let package = Package(
         .testTarget(
             name: "SeedeeKitTests",
             dependencies: [
-                .target(name: "SeedeeKit")
-            ]),
+                .target(name: "SeedeeKit"),
+            ],
+            exclude: ["Resources/Fixtures/"],
+            resources: [.copy("Resources/Fixtures")]
+        ),
         .executableTarget(name: "Example", dependencies: ["SeedeeKit"]),
     ]
 )
