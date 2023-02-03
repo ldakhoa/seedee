@@ -1,13 +1,12 @@
 import Foundation
-import OrderedCollections
 
 public struct BuildOptions {
     var buildConfiguration: BuildConfiguration
-    var sdks: OrderedSet<SDK>
+    var sdk: SDK
 
-    init(buildConfiguration: BuildConfiguration, sdks: OrderedSet<SDK>) {
+    init(buildConfiguration: BuildConfiguration, sdks: SDK) {
         self.buildConfiguration = buildConfiguration
-        self.sdks = sdks
+        self.sdk = sdks
     }
 }
 

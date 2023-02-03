@@ -12,6 +12,13 @@ public struct CommandBuilder {
     }
 
     @discardableResult
+    public func append(_ component: String) -> CommandBuilder {
+        var newBuilder = self
+        newBuilder.command.append(" \(component)")
+        return newBuilder
+    }
+
+    @discardableResult
     public func append(_ component: StaticString) -> CommandBuilder {
         var newBuilder = self
         newBuilder.command.append(" \(component)")

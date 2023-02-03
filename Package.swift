@@ -22,8 +22,6 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser.git",
                  .upToNextMinor(from: "1.2.1")),
-        .package(url: "https://github.com/apple/swift-collections.git",
-                 .upToNextMajor(from: "1.0.3")),
         .package(url: "https://github.com/apple/swift-log.git",
                  .upToNextMinor(from: "1.4.2")),
         .package(url: "https://github.com/onevcat/Rainbow",
@@ -39,7 +37,6 @@ let package = Package(
         .target(
             name: "SeedeeKit",
             dependencies: [
-                .product(name: "Collections", package: "swift-collections"),
                 .product(name: "Logging", package: "swift-log"),
                 .product(name: "Rainbow", package: "Rainbow"),
             ]),

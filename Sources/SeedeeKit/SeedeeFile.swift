@@ -11,7 +11,7 @@ extension SeedeeFile {
             try await runner.action(runner)
 
             // Testing purpose
-            try await runner.buildXcodeProject()
+            try await runner.buildXcodeProject(project: "project", scheme: "example")
         } catch {
 
         }
