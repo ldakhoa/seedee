@@ -14,11 +14,14 @@ let package = Package(
             targets: ["seedee"]),
         .library(
             name: "SeedeeKit",
-            targets: ["SeedeeKit"])
+            targets: ["SeedeeKit"]),
+
+        // Testing for early stage, need to remove later
+        .executable(name: "Example", targets: ["Example"])
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser.git",
-                 .upToNextMinor(from: "1.1.0")),
+                 .upToNextMinor(from: "1.2.1")),
         .package(url: "https://github.com/apple/swift-collections.git",
                  .upToNextMajor(from: "1.0.3")),
         .package(url: "https://github.com/apple/swift-log.git",
@@ -45,5 +48,6 @@ let package = Package(
             dependencies: [
                 .target(name: "SeedeeKit")
             ]),
+        .executableTarget(name: "Example", dependencies: ["SeedeeKit"]),
     ]
 )

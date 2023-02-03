@@ -3,6 +3,5 @@ import ArgumentParser
 
 extension Seedee {
     struct Build: AsyncParsableCommand {
-        
     }
 }

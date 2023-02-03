@@ -1,6 +1,6 @@
 import Foundation
 
-public protocol Action<Output> {
+public protocol Action<Output>: Executor {
     associatedtype Output
 
     var name: String { get }
@@ -14,4 +14,12 @@ public extension Action {
     }
 
     func cleanUp(error: Error?) async throws {}
+}
+
+public extension Action {
+    @discardableResult
+    func action<A: Action>(_ action: A) async throws -> A.Output {
+        let output = try await action.run()
+        return output
+    }
 }
