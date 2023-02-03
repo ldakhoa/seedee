@@ -4,6 +4,7 @@ included:
 excluded:
   - .build
   - Sources/Example
+  - Tests/SeedeeKitTests/Resources/Fixtures
 disabled_rules:
   - function_parameter_count
   - force_try
