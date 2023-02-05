@@ -3,22 +3,26 @@ import Foundation
 public struct BuildXcodeProjectAction: Action {
     public let name = "Build Xcode Project"
 
-    let project: String?
-    let scheme: String?
-    let buildOptions: BuildOptions?
-    let cleanBuild: Bool
-    let archivePath: String?
-    let projectVersion: String?
-    let xcbeautify: Bool
+    private let project: String?
+    private let scheme: String?
+    private let buildOptions: BuildOptions?
+    private let cleanBuild: Bool
+    private let archivePath: String?
+    private let projectVersion: String?
+    private let xcbeautify: Bool
+    private let workingDirectory: String?
+    private let quiet: Bool
 
-    init(
+    public init(
         project: String? = nil,
         scheme: String? = nil,
-        buildOptions: BuildOptions?,
+        buildOptions: BuildOptions? = nil,
         cleanBuild: Bool = false,
         archivePath: String? = nil,
         projectVersion: String? = nil,
-        xcbeautify: Bool = false
+        xcbeautify: Bool = false,
+        workingDirectory: String? = nil,
+        quiet: Bool = false
     ) {
         self.project = project
         self.scheme = scheme
@@ -27,18 +31,24 @@ public struct BuildXcodeProjectAction: Action {
         self.archivePath = archivePath
         self.projectVersion = projectVersion
         self.xcbeautify = xcbeautify
+        self.workingDirectory = workingDirectory
+        self.quiet = quiet
     }
 
     public func run() async throws -> String {
+        let defaultDestination = "platform=iOS Simulator,name=iPhone 14"
+        let destination = buildOptions?.sdk.destination ?? defaultDestination
+
         let xcodebuild = CommandBuilder("xcodebuild")
             .append(archivePath != nil ? "archive -archivePath \(archivePath!)" : "build")
             .append("-project", value: project)
             .append("-scheme", value: scheme)
-            .append("-destination", value: buildOptions?.sdk.destination)
+            .append("-destination", value: "\'\(destination)\'")
             .append("-configuration", value: buildOptions?.buildConfiguration.settingsValue)
             .append("CURRENT_PROJECT_VERSION", "=", value: projectVersion)
+            .append("clean", flag: cleanBuild)
 
-        return try executor.shell(xcodebuild)
+        return try executor.shell(xcodebuild, workingDirectory: workingDirectory, quiet: quiet)
     }
 }
 

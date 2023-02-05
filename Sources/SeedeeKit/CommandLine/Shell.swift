@@ -6,10 +6,11 @@ public struct Shell {
     @discardableResult
     public func callAsFunction(
         _ builder: CommandBuilder,
+        workingDirectory: String? = nil,
         log: Bool = true,
-        verbose: Bool = false
+        quiet: Bool = false
     ) throws -> String {
-        let currentDirectory = fileManager.currentDirectoryPath
+        let currentDirectory = workingDirectory ?? fileManager.currentDirectoryPath
 
         let command = builder.command
 
@@ -22,7 +23,7 @@ public struct Shell {
         let commandLine = CommandLine(command: command, workingDirectory: currentDirectory)
         let output = try commandLine.launch()
 
-        if verbose {
+        if !quiet {
             print(output)
         }
 
