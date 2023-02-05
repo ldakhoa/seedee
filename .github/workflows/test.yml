@@ -9,7 +9,7 @@ on:
       - "*"
 
 jobs:
-  SwiftLint:
+  UnitTest:
     runs-on: macos-12
     steps:
       - uses: actions/checkout@v3
