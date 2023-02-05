@@ -6,6 +6,7 @@ public struct BuildXcodeProjectAction: Action {
     private let project: String?
     private let scheme: String?
     private let buildOptions: BuildOptions?
+    private let buildForTesting: Bool
     private let cleanBuild: Bool
     private let archivePath: String?
     private let projectVersion: String?
@@ -17,6 +18,7 @@ public struct BuildXcodeProjectAction: Action {
         project: String? = nil,
         scheme: String? = nil,
         buildOptions: BuildOptions? = nil,
+        buildForTesting: Bool = false,
         cleanBuild: Bool = false,
         archivePath: String? = nil,
         projectVersion: String? = nil,
@@ -27,6 +29,7 @@ public struct BuildXcodeProjectAction: Action {
         self.project = project
         self.scheme = scheme
         self.buildOptions = buildOptions
+        self.buildForTesting = buildForTesting
         self.cleanBuild = cleanBuild
         self.archivePath = archivePath
         self.projectVersion = projectVersion
@@ -39,8 +42,9 @@ public struct BuildXcodeProjectAction: Action {
         let defaultDestination = "platform=iOS Simulator,name=iPhone 14"
         let destination = buildOptions?.sdk.destination ?? defaultDestination
 
+        let buildCommand = buildForTesting ? "build-for-testing" : "build"
         let xcodebuild = CommandBuilder("xcodebuild")
-            .append(archivePath != nil ? "archive -archivePath \(archivePath!)" : "build")
+            .append(archivePath != nil ? "archive -archivePath \(archivePath!)" : buildCommand)
             .append("-project", value: project)
             .append("-scheme", value: scheme)
             .append("-destination", value: "\'\(destination)\'")
