@@ -10,6 +10,6 @@ extension XCTest {
     }
 
     var integrationAppPath: URL {
-        fixturePath(for: "IntegrationApp")            
+        fixturePath(for: "IntegrationApp")
     }
 }
