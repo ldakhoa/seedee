@@ -36,6 +36,7 @@ public struct CommandLine {
     public func launch() throws -> String {
         let command = "cd \(workingDirectory.escapingSpaces) && \(command) \(arguments.joined(separator: " "))"
 
+        logger.info("$ \(command)")
         return try process.run(with: command)
     }
 }
