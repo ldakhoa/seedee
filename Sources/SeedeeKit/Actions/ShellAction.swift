@@ -3,20 +3,29 @@ import Foundation
 public struct ShellAction: Action {
     public let name = "Run Shell"
 
-    let builder: CommandBuilder
+    let commandBuilder: CommandBuilder
+    let workingDirectory: String?
 
-    public init(builder: CommandBuilder) {
-        self.builder = builder
+    public init(
+        commandBuilder: CommandBuilder,
+        workingDirectory: String? = nil
+    ) {
+        self.commandBuilder = commandBuilder
+        self.workingDirectory = workingDirectory
     }
 
+    @discardableResult
     public func run() async throws -> String {
-        try executor.shell(builder)
+        try executor.shell(commandBuilder, workingDirectory: workingDirectory)
     }
 }
 
 public extension Action {
     @discardableResult
-    func shell(_ builder: CommandBuilder) async throws -> String {
-        try await action(ShellAction(builder: builder))
+    func shell(
+        _ builder: CommandBuilder,
+        workingDirectory: String? = nil
+    ) async throws -> String {
+        try await action(ShellAction(commandBuilder: builder, workingDirectory: workingDirectory))
     }
 }

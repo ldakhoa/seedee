@@ -4,8 +4,10 @@ public struct BuildXcodeProjectAction: Action {
     public let name = "Build Xcode Project"
 
     private let project: String?
+    private let workspace: String?
     private let scheme: String?
-    private let buildOptions: BuildOptions?
+    private let buildConfiguration: BuildOptions.BuildConfiguration?
+    private let destination: BuildOptions.Destination?
     private let buildForTesting: Bool
     private let cleanBuild: Bool
     private let archivePath: String?
@@ -16,8 +18,10 @@ public struct BuildXcodeProjectAction: Action {
 
     public init(
         project: String? = nil,
+        workspace: String? = nil,
         scheme: String? = nil,
-        buildOptions: BuildOptions? = nil,
+        buildConfiguration: BuildOptions.BuildConfiguration? = nil,
+        destination: BuildOptions.Destination? = nil,
         buildForTesting: Bool = false,
         cleanBuild: Bool = false,
         archivePath: String? = nil,
@@ -27,8 +31,10 @@ public struct BuildXcodeProjectAction: Action {
         quiet: Bool = false
     ) {
         self.project = project
+        self.workspace = workspace
         self.scheme = scheme
-        self.buildOptions = buildOptions
+        self.buildConfiguration = buildConfiguration
+        self.destination = destination
         self.buildForTesting = buildForTesting
         self.cleanBuild = cleanBuild
         self.archivePath = archivePath
@@ -39,16 +45,18 @@ public struct BuildXcodeProjectAction: Action {
     }
 
     public func run() async throws -> String {
-        let defaultDestination = "platform=iOS Simulator,name=iPhone 14"
-        let destination = buildOptions?.sdk.destination ?? defaultDestination
+        let defaultDestination = "platform=iOS Simulator,name=iPhone 8"
+        let destination = destination?.description ?? defaultDestination
 
         let buildCommand = buildForTesting ? "build-for-testing" : "build"
+
         let xcodebuild = CommandBuilder("xcodebuild")
             .append(archivePath != nil ? "archive -archivePath \(archivePath!)" : buildCommand)
             .append("-project", value: project)
+            .append("-workspace", value: workspace)
             .append("-scheme", value: scheme)
             .append("-destination", value: "\'\(destination)\'")
-            .append("-configuration", value: buildOptions?.buildConfiguration.settingsValue)
+            .append("-configuration", value: buildConfiguration?.settingsValue)
             .append("CURRENT_PROJECT_VERSION", "=", value: projectVersion)
             .append("clean", flag: cleanBuild)
 
@@ -60,16 +68,20 @@ public extension Action {
     @discardableResult
     func buildXcodeProject(
         project: String? = nil,
+        workspace: String? = nil,
         scheme: String? = nil,
-        buildOptions: BuildOptions? = nil,
+        buildConfiguration: BuildOptions.BuildConfiguration? = nil,
+        destination: BuildOptions.Destination? = nil,
         cleanBuild: Bool = false,
         archivePath: String? = nil
     ) async throws -> String {
         try await action(
             BuildXcodeProjectAction(
                 project: project,
+                workspace: workspace,
                 scheme: scheme,
-                buildOptions: buildOptions,
+                buildConfiguration: buildConfiguration,
+                destination: destination,
                 cleanBuild: cleanBuild,
                 archivePath: archivePath
             )

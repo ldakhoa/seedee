@@ -3,12 +3,6 @@ import XCTest
 @testable import SeedeeKit
 
 final class TestXcodeProjectActionTests: XCTestCase {
-    private var buildOptions: BuildOptions!
-
-    override func setUp() {
-        super.setUp()
-        buildOptions = BuildOptions(buildConfiguration: .debug, sdks: .iOSSimulator)
-    }
 
     func test_testXcodeProject() async throws {
         let action = TestXcodeProjectAction(
@@ -34,6 +28,22 @@ final class TestXcodeProjectActionTests: XCTestCase {
         let output = try await action.run()
 
         XCTAssertEqual(output.contains("** TEST EXECUTE SUCCEEDED **"), true)
+    }
 
+    func test_testXcodeProject_withWorkspace() async throws {
+        let path = fixturePath(for: "IntegrationPodApp").path
+
+        try await ShellAction(commandBuilder: CommandBuilder("bundle install"), workingDirectory: path).run()
+        try await ShellAction(commandBuilder: CommandBuilder("bundle exec pod install"), workingDirectory: path).run()
+
+        let action = TestXcodeProjectAction(
+            workspace: "IntegrationPodApp.xcworkspace",
+            scheme: "IntegrationPodApp",
+            destination: .custom("platform=iOS Simulator,name=iPhone 8"),
+            workingDirectory: path
+        )
+        let output = try await action.run()
+
+        XCTAssertEqual(output.contains("** TEST SUCCEEDED **"), true)
     }
 }

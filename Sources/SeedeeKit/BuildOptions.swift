@@ -1,40 +1,32 @@
 import Foundation
 
-public struct BuildOptions {
-    var buildConfiguration: BuildConfiguration
-    var sdk: SDK
+public enum BuildOptions {
+    public enum BuildConfiguration: String, Codable {
+        case debug
+        case release
 
-    init(buildConfiguration: BuildConfiguration, sdks: SDK) {
-        self.buildConfiguration = buildConfiguration
-        self.sdk = sdks
-    }
-}
-
-public enum BuildConfiguration: String, Codable {
-    case debug
-    case release
-
-    var settingsValue: String {
-        switch self {
-        case .debug: return "Debug"
-        case .release: return "Release"
+        var settingsValue: String {
+            switch self {
+            case .debug: return "Debug"
+            case .release: return "Release"
+            }
         }
     }
-}
 
-public enum SDK: String, Codable {
-    case iOSSimulator
-    case iOS
-    case macOS
+    public enum Destination: CustomStringConvertible {
+        case iOSSimulator
+        case iOS
+        case custom(_ destination: String)
 
-    var destination: String {
-        switch self {
-        case .iOSSimulator:
-            return "platform=iOS Simulator"
-        case .iOS:
-            return "platform=iOS"
-        case .macOS:
-            return "platform=macOS,name=Any Mac"
+        public var description: String {
+            switch self {
+            case .iOSSimulator:
+                return "platform=iOS Simulator"
+            case .iOS:
+                return "platform=iOS"
+            case let .custom(destination):
+                return destination
+            }
         }
     }
 }
