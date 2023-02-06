@@ -30,11 +30,11 @@ public enum SDK: String, Codable {
     var destination: String {
         switch self {
         case .iOSSimulator:
-            return "generic/platform=iOS Simulator"
+            return "platform=iOS Simulator"
         case .iOS:
-            return "generic/platform=iOS"
+            return "platform=iOS"
         case .macOS:
-            return "generic/platform=macOS,name=Any Mac"
+            return "platform=macOS,name=Any Mac"
         }
     }
 }
