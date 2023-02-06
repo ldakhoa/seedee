@@ -3,7 +3,7 @@ import XCTest
 @testable import SeedeeKit
 
 final class BuildXcodeProjectActionTests: XCTestCase {
-    
+
     func test_buildXcodeProject() async throws {
         let action = BuildXcodeProjectAction(
             project: "IntegrationApp.xcodeproj",
