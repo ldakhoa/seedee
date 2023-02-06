@@ -32,7 +32,7 @@ final class TestXcodeProjectActionTests: XCTestCase {
 
     func test_testXcodeProject_withWorkspace() async throws {
         let path = fixturePath(for: "IntegrationPodApp").path
-        
+
         try await ShellAction(commandBuilder: CommandBuilder("bundle install"), workingDirectory: path).run()
         try await ShellAction(commandBuilder: CommandBuilder("bundle exec pod install"), workingDirectory: path).run()
 
