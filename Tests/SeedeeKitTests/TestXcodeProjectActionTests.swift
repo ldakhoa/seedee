@@ -2,7 +2,7 @@ import Foundation
 import XCTest
 @testable import SeedeeKit
 
-final class BuildXcodeProjectActionTests: XCTestCase {
+final class TestXcodeProjectActionTests: XCTestCase {
     private var buildOptions: BuildOptions!
 
     override func setUp() {
@@ -10,33 +10,30 @@ final class BuildXcodeProjectActionTests: XCTestCase {
         buildOptions = BuildOptions(buildConfiguration: .debug, sdks: .iOSSimulator)
     }
 
-    func test_BuildXcodeProject() async throws {
-        let action = BuildXcodeProjectAction(
+    func test_testXcodeProject() async throws {
+        let action = TestXcodeProjectAction(
             project: "IntegrationApp.xcodeproj",
             scheme: "IntegrationApp",
-            buildOptions: buildOptions,
-            cleanBuild: true,
-            xcbeautify: false,
+            destination: nil,
             workingDirectory: integrationAppPath.path
         )
+
         let output = try await action.run()
 
-        XCTAssertEqual(output.contains("** BUILD SUCCEEDED **"), true)
+        XCTAssertEqual(output.contains("** TEST SUCCEEDED **"), true)
     }
 
-    func test_BuildXcodeProject_buildForTestingEnable() async throws {
-        let action = BuildXcodeProjectAction(
+    func test_BuildXcodeProject_testWithoutBuildingEnable() async throws {
+        let action = TestXcodeProjectAction(
             project: "IntegrationApp.xcodeproj",
             scheme: "IntegrationApp",
-            buildOptions: buildOptions,
-            buildForTesting: true,
-            cleanBuild: true,
-            xcbeautify: false,
+            destination: nil,
+            testWithoutBuilding: true,
             workingDirectory: integrationAppPath.path
         )
         let output = try await action.run()
 
-        XCTAssertEqual(output.contains("** TEST BUILD SUCCEEDED **"), true)
+        XCTAssertEqual(output.contains("** TEST EXECUTE SUCCEEDED **"), true)
 
     }
 }
