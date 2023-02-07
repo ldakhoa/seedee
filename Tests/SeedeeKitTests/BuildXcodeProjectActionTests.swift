@@ -58,7 +58,7 @@ final class BuildXcodeProjectActionTests: XCTestCase {
 
     func test_buildXcodeProject_withWorkspace() async throws {
         let path = fixturePath(for: "IntegrationPodApp").path
-        
+
         let action = BuildXcodeProjectAction(
             workspace: "IntegrationPodApp.xcworkspace",
             scheme: "IntegrationPodApp",
