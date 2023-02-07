@@ -5,14 +5,17 @@ import XCTest
 final class TestXcodeProjectActionTests: XCTestCase {
     func test_testXcodeProject() async throws {
         let action = TestXcodeProjectAction(
-            project: "IntegrationApp.xcodeproj",
-            scheme: "IntegrationApp",
+            workspace: "IntegrationPodApp.xcworkspace",
+            scheme: "IntegrationPodApp",
             destination: nil,
-            workingDirectory: integrationAppPath.path
+            workingDirectory: fixturePath(for: "IntegrationPodApp").path,
+            xcpretty: true
         )
 
-        let output = try await action.run()
+        let command = try await action.buildCommand()
 
-        XCTAssertEqual(output.contains("** TEST SUCCEEDED **"), true)
+        let expectedCommand = CommandBuilder("set -o pipefail && xcodebuild test -workspace IntegrationPodApp.xcworkspace -scheme IntegrationPodApp -destination 'platform=iOS Simulator,name=iPhone 8' | xcpretty")
+
+        XCTAssertEqual(command, expectedCommand)
     }
 }

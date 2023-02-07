@@ -114,11 +114,14 @@ private extension Process {
         // and then read the data back out.
         return try outputQueue.sync {
             if terminationStatus != 0 {
-                throw CommandLineError(
+                let error = CommandLineError(
                     terminationStatus: terminationStatus,
                     errorData: errorData,
                     outputData: outputData
                 )
+
+                logger.error(error.message)
+                throw error
             }
 
             return outputData.shellOutput()

@@ -1,6 +1,6 @@
 import Foundation
 
-public struct CommandBuilder {
+public struct CommandBuilder: Equatable {
     private(set) var command: String
 
     private init() {
