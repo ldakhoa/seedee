@@ -12,7 +12,7 @@ public struct BuildXcodeProjectAction: Action {
     private let cleanBuild: Bool
     private let archivePath: String?
     private let projectVersion: String?
-    private let xcbeautify: Bool
+    private let xcpretty: Bool
     private let workingDirectory: String?
     private let quiet: Bool
 
@@ -26,7 +26,7 @@ public struct BuildXcodeProjectAction: Action {
         cleanBuild: Bool = false,
         archivePath: String? = nil,
         projectVersion: String? = nil,
-        xcbeautify: Bool = false,
+        xcpretty: Bool = false,
         workingDirectory: String? = nil,
         quiet: Bool = false
     ) {
@@ -39,7 +39,7 @@ public struct BuildXcodeProjectAction: Action {
         self.cleanBuild = cleanBuild
         self.archivePath = archivePath
         self.projectVersion = projectVersion
-        self.xcbeautify = xcbeautify
+        self.xcpretty = xcpretty
         self.workingDirectory = workingDirectory
         self.quiet = quiet
     }
@@ -50,7 +50,7 @@ public struct BuildXcodeProjectAction: Action {
 
         let buildCommand = buildForTesting ? "build-for-testing" : "build"
 
-        let xcodebuild = CommandBuilder("xcodebuild")
+        let xcodebuild = CommandBuilder("set -o pipefail && xcodebuild")
             .append(archivePath != nil ? "archive -archivePath \(archivePath!)" : buildCommand)
             .append("-project", value: project)
             .append("-workspace", value: workspace)
@@ -59,6 +59,7 @@ public struct BuildXcodeProjectAction: Action {
             .append("-configuration", value: buildConfiguration?.settingsValue)
             .append("CURRENT_PROJECT_VERSION", "=", value: projectVersion)
             .append("clean", flag: cleanBuild)
+            .append("| xcpretty", flag: xcpretty)
 
         return try executor.shell(xcodebuild, workingDirectory: workingDirectory, quiet: quiet)
     }

@@ -4,19 +4,41 @@ import XCTest
 
 final class BuildXcodeProjectActionTests: XCTestCase {
 
+    override class func setUp() {
+        super.setUp()
+
+        Task {
+            let integrationPodPath = fixturePath(for: "IntegrationPodApp").path
+
+            try await ShellAction(commandBuilder: CommandBuilder("bundle install"), workingDirectory: integrationPodPath).run()
+            try await ShellAction(commandBuilder: CommandBuilder("bundle exec pod install"), workingDirectory: integrationPodPath).run()
+        }
+    }
+
     func test_buildXcodeProject() async throws {
         let action = BuildXcodeProjectAction(
             project: "IntegrationApp.xcodeproj",
             scheme: "IntegrationApp",
             buildConfiguration: .debug,
-            destination: .iOSSimulator,
             cleanBuild: true,
-            xcbeautify: false,
+            xcpretty: false,
             workingDirectory: integrationAppPath.path
         )
         let output = try await action.run()
 
         XCTAssertEqual(output.contains("** BUILD SUCCEEDED **"), true)
+    }
+
+    func test_buildXcodeProject_xcprettyEnable() async throws {
+        let action = BuildXcodeProjectAction(
+            workspace: "IntegrationPodApp.xcworkspace",
+            scheme: "IntegrationPodApp",
+            xcpretty: true,
+            workingDirectory: fixturePath(for: "IntegrationPodApp").path
+        )
+        let output = try await action.run()
+
+        XCTAssertEqual(output.contains("Build Succeeded"), true)
     }
 
     func test_buildXcodeProject_buildForTestingEnable() async throws {
@@ -27,7 +49,6 @@ final class BuildXcodeProjectActionTests: XCTestCase {
             destination: .iOSSimulator,
             buildForTesting: true,
             cleanBuild: true,
-            xcbeautify: false,
             workingDirectory: integrationAppPath.path
         )
         let output = try await action.run()
@@ -37,10 +58,7 @@ final class BuildXcodeProjectActionTests: XCTestCase {
 
     func test_buildXcodeProject_withWorkspace() async throws {
         let path = fixturePath(for: "IntegrationPodApp").path
-
-        try await ShellAction(commandBuilder: CommandBuilder("bundle install"), workingDirectory: path).run()
-        try await ShellAction(commandBuilder: CommandBuilder("bundle exec pod install"), workingDirectory: path).run()
-
+        
         let action = BuildXcodeProjectAction(
             workspace: "IntegrationPodApp.xcworkspace",
             scheme: "IntegrationPodApp",
