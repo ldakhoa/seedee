@@ -14,7 +14,7 @@ final class TestXcodeProjectActionTests: XCTestCase {
 
         let command = try await action.buildCommand()
 
-        let expectedCommand = CommandBuilder("set -o pipefail && xcodebuild test -workspace IntegrationPodApp.xcworkspace -scheme IntegrationPodApp -destination 'platform=iOS Simulator,name=iPhone 14' | xcpretty")
+        let expectedCommand = CommandBuilder("set -o pipefail && xcodebuild test -workspace IntegrationPodApp.xcworkspace -scheme IntegrationPodApp -destination 'platform=iOS Simulator,name=iPhone 8' | xcpretty")
 
         XCTAssertEqual(command, expectedCommand)
     }
