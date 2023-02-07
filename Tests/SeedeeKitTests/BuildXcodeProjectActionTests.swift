@@ -11,7 +11,7 @@ final class BuildXcodeProjectActionTests: XCTestCase {
             let integrationPodPath = fixturePath(for: "IntegrationPodApp").path
 
             try await ShellAction(commandBuilder: CommandBuilder("bundle install"), workingDirectory: integrationPodPath).run()
-            try await ShellAction(commandBuilder: CommandBuilder("bundle exec pod install"), workingDirectory: integrationPodPath).run()
+            try await ShellAction(commandBuilder: CommandBuilder("pod install"), workingDirectory: integrationPodPath).run()
         }
     }
 
