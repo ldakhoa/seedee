@@ -1,4 +1,4 @@
-name: Test
+name: Seedee
 
 on:
   push:
@@ -13,11 +13,13 @@ jobs:
     runs-on: macos-12
     steps:
       - uses: actions/checkout@v3
-      - name: Xcode version
+      - name: Select Xcode version
         run: sudo xcode-select -s '/Applications/Xcode_14.2.app/Contents/Developer'
       - name: SwiftLint
         run: swiftlint --strict
-      - name: Build package
+      - name: Build Package
         run: swift build -v
-      - name: Run unit test
+      - name: Run Unit Tests
         run: swift test -v
+      env:
+        ENABLE_INTEGRATION_TESTS: 1
