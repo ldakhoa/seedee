@@ -4,29 +4,20 @@ import XCTest
 
 final class BuildXcodeProjectActionTests: XCTestCase {
 
-    override class func setUp() {
-        super.setUp()
-
-        Task {
-            let integrationPodPath = fixturePath(for: "IntegrationPodApp").path
-
-            try await ShellAction(commandBuilder: CommandBuilder("bundle install"), workingDirectory: integrationPodPath).run()
-            try await ShellAction(commandBuilder: CommandBuilder("pod install"), workingDirectory: integrationPodPath).run()
-        }
-    }
-
     func test_buildXcodeProject() async throws {
         let action = BuildXcodeProjectAction(
             project: "IntegrationApp.xcodeproj",
             scheme: "IntegrationApp",
             buildConfiguration: .debug,
             cleanBuild: true,
-            xcpretty: false,
             workingDirectory: integrationAppPath.path
         )
-        let output = try await action.run()
 
-        XCTAssertEqual(output.contains("** BUILD SUCCEEDED **"), true)
+        let command = try await action.buildCommand()
+
+        let expectedCommand = CommandBuilder("set -o pipefail && xcodebuild build -project IntegrationApp.xcodeproj -scheme IntegrationApp -destination 'platform=iOS Simulator,name=iPhone 8' -configuration Debug clean")
+
+        XCTAssertEqual(command, expectedCommand)
     }
 
     func test_buildXcodeProject_xcprettyEnable() async throws {
@@ -36,9 +27,11 @@ final class BuildXcodeProjectActionTests: XCTestCase {
             xcpretty: true,
             workingDirectory: fixturePath(for: "IntegrationPodApp").path
         )
-        let output = try await action.run()
+        let command = try await action.buildCommand()
 
-        XCTAssertEqual(output.contains("Build Succeeded"), true)
+        let expectedCommand = CommandBuilder("set -o pipefail && xcodebuild build -workspace IntegrationPodApp.xcworkspace -scheme IntegrationPodApp -destination 'platform=iOS Simulator,name=iPhone 8' | xcpretty")
+
+        XCTAssertEqual(command, expectedCommand)
     }
 
     func test_buildXcodeProject_buildForTestingEnable() async throws {
@@ -51,9 +44,11 @@ final class BuildXcodeProjectActionTests: XCTestCase {
             cleanBuild: true,
             workingDirectory: integrationAppPath.path
         )
-        let output = try await action.run()
 
-        XCTAssertEqual(output.contains("** TEST BUILD SUCCEEDED **"), true)
+        let command = try await action.buildCommand()
+
+        let expectedCommand = CommandBuilder("set -o pipefail && xcodebuild build-for-testing -project IntegrationApp.xcodeproj -scheme IntegrationApp -destination 'platform=iOS Simulator' -configuration Debug clean")
+        XCTAssertEqual(command, expectedCommand)
     }
 
     func test_buildXcodeProject_withWorkspace() async throws {
@@ -66,8 +61,10 @@ final class BuildXcodeProjectActionTests: XCTestCase {
             destination: .custom("platform=iOS Simulator,name=iPhone 8"),
             workingDirectory: path
         )
-        let output = try await action.run()
+        let command = try await action.buildCommand()
 
-        XCTAssertEqual(output.contains("** BUILD SUCCEEDED **"), true)
+        let expectedCommand = CommandBuilder("set -o pipefail && xcodebuild build -workspace IntegrationPodApp.xcworkspace -scheme IntegrationPodApp -destination 'platform=iOS Simulator,name=iPhone 8' -configuration Debug")
+
+        XCTAssertEqual(command, expectedCommand)
     }
 }

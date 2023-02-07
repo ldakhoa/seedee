@@ -12,6 +12,10 @@ extension Logger {
             self.error("❌ \(error.localizedDescription)", metadata: .color(.red))
         }
     }
+
+    func error(_ error: String) {
+        self.error("❌ \(error)", metadata: .color(.red))
+    }
 }
 
 // MARK: - Helpers

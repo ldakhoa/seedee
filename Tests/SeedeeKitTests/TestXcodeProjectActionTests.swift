@@ -1,18 +1,21 @@
-//import Foundation
-//import XCTest
-//@testable import SeedeeKit
-//
-//final class TestXcodeProjectActionTests: XCTestCase {
-//    func test_testXcodeProject() async throws {
-//        let action = TestXcodeProjectAction(
-//            project: "IntegrationApp.xcodeproj",
-//            scheme: "IntegrationApp",
-//            destination: nil,
-//            workingDirectory: integrationAppPath.path
-//        )
-//
-//        let output = try await action.run()
-//
-//        XCTAssertEqual(output.contains("** TEST SUCCEEDED **"), true)
-//    }
-//}
+import Foundation
+import XCTest
+@testable import SeedeeKit
+
+final class TestXcodeProjectActionTests: XCTestCase {
+    func test_testXcodeProject() async throws {
+        let action = TestXcodeProjectAction(
+            workspace: "IntegrationPodApp.xcworkspace",
+            scheme: "IntegrationPodApp",
+            destination: nil,
+            workingDirectory: fixturePath(for: "IntegrationPodApp").path,
+            xcpretty: true
+        )
+
+        let command = try await action.buildCommand()
+
+        let expectedCommand = CommandBuilder("set -o pipefail && xcodebuild test -workspace IntegrationPodApp.xcworkspace -scheme IntegrationPodApp -destination 'platform=iOS Simulator,name=iPhone 14' | xcpretty")
+
+        XCTAssertEqual(command, expectedCommand)
+    }
+}

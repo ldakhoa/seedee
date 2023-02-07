@@ -45,6 +45,10 @@ public struct BuildXcodeProjectAction: Action {
     }
 
     public func run() async throws -> String {
+        try await executor.shell(buildCommand(), workingDirectory: workingDirectory, quiet: quiet)
+    }
+
+    public func buildCommand() async throws -> CommandBuilder {
         let defaultDestination = "platform=iOS Simulator,name=iPhone 8"
         let destination = destination?.description ?? defaultDestination
 
@@ -61,7 +65,7 @@ public struct BuildXcodeProjectAction: Action {
             .append("clean", flag: cleanBuild)
             .append("| xcpretty", flag: xcpretty)
 
-        return try executor.shell(xcodebuild, workingDirectory: workingDirectory, quiet: quiet)
+        return xcodebuild
     }
 }
 

@@ -6,6 +6,7 @@ public protocol Action<Output>: Executor {
     var name: String { get }
     func run() async throws -> Output
     func cleanUp(error: Error?) async throws
+    func buildCommand() async throws -> CommandBuilder
 }
 
 public extension Action {
@@ -14,6 +15,7 @@ public extension Action {
     }
 
     func cleanUp(error: Error?) async throws {}
+    func buildCommand() async throws -> CommandBuilder { CommandBuilder("") }
 }
 
 public extension Action {
