@@ -1,7 +1,6 @@
-//import Foundation
+// import Foundation
 //
-//public struct Shell {
-////    @ExecutorWrapper(\.fileManager) var fileManager
+// public struct Shell {
 //
 //    @discardableResult
 //    public func callAsFunction(
@@ -29,9 +28,9 @@
 //
 //        return output
 //    }
-//}
+// }
 //
-//extension TaskExecutor {
+// extension TaskExecutor {
 //    enum ShellKey: ExecutorKey {
 //        static var defaultValue = Shell()
 //    }
@@ -44,4 +43,4 @@
 //            self[ShellKey.self] = newValue
 //        }
 //    }
-//}
+// }

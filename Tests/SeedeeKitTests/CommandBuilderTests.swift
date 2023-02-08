@@ -18,7 +18,7 @@ final class CommandBuilderTests: XCTestCase {
             .append("IntegrationApp")
             .append("-destination")
             .append("'platform=iOS Simulator,name=iPhone 8'")
-        
+
         XCTAssertEqual(builder.command, [
             "cd",
             "Seedee/Tests/SeedeeKitTests/Resources/Fixtures/IntegrationApp",
