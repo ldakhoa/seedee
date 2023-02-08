@@ -4,18 +4,22 @@ import XCTest
 
 final class TestXcodeProjectActionTests: XCTestCase {
     func test_testXcodeProject() async throws {
-        let action = TestXcodeProjectAction(
-            workspace: "IntegrationPodApp.xcworkspace",
-            scheme: "IntegrationPodApp",
-            destination: nil,
-            workingDirectory: fixturePath(for: "IntegrationPodApp").path,
-            xcpretty: true
-        )
+        let project = Project(
+            workingDirectory: integrationAppPath,
+            projectPath: "IntegrationApp.xcodeproj",
+            scheme: "IntegrationApp")
 
-        let command = try await action.buildCommand()
+        let action = TestXcodeProjectAction(project: project)
+        let expectation = self.expectation(description: "Build Completed")
 
-        let expectedCommand = CommandBuilder("set -o pipefail && xcodebuild test -workspace IntegrationPodApp.xcworkspace -scheme IntegrationPodApp -destination 'platform=iOS Simulator,name=iPhone 8' | xcpretty")
+        do {
+            let result = try await action.run()
+            XCTAssertEqual(result.exitStatus, .terminated(code: 0))
+            expectation.fulfill()
+        } catch {
+            XCTFail("Failed to run \(error)")
+        }
 
-        XCTAssertEqual(command, expectedCommand)
+        await waitForExpectations(timeout: 300)
     }
 }

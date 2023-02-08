@@ -1,6 +1,6 @@
 import Foundation
 
-public protocol Action<Output>: Executor {
+public protocol Action<Output> {
     associatedtype Output
 
     var name: String { get }

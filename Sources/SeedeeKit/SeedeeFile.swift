@@ -9,9 +9,6 @@ extension SeedeeFile {
         do {
             let runner = self.init()
             try await runner.action(runner)
-
-            // Testing purpose
-            try await runner.buildXcodeProject(project: "project", scheme: "example")
         } catch {
 
         }

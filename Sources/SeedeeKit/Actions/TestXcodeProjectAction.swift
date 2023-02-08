@@ -1,66 +1,66 @@
 import Foundation
 
-public struct TestXcodeProjectAction: Action {
+struct TestXcodeProjectAction: Action {
     public let name = "Test Xcode Project"
 
-    private let project: String?
-    private let workspace: String?
-    private let scheme: String?
+    private let project: Project
     private let destination: BuildOptions.Destination?
     private let testWithoutBuilding: Bool
-    private let workingDirectory: String?
     private let xcpretty: Bool
+    private let executor: any Executor
 
     public init(
-        project: String? = nil,
-        workspace: String? = nil,
-        scheme: String? = nil,
+        project: Project,
         destination: BuildOptions.Destination? = nil,
         testWithoutBuilding: Bool = false,
-        workingDirectory: String? = nil,
-        xcpretty: Bool = false
+        xcpretty: Bool = false,
+        executor: any Executor = ProcessExecutor()
     ) {
         self.project = project
-        self.workspace = workspace
-        self.scheme = scheme
         self.destination = destination
         self.testWithoutBuilding = testWithoutBuilding
-        self.workingDirectory = workingDirectory
         self.xcpretty = xcpretty
+        self.executor = executor
     }
 
-    public func run() async throws -> String {
-        try await executor.shell(buildCommand(), workingDirectory: workingDirectory)
+    @discardableResult
+    func run() async throws -> ExecutorResult {
+        let buildCommand = try await buildCommand().command
+        return try await executor.execute(buildCommand)
     }
 
     public func buildCommand() async throws -> CommandBuilder {
         let defaultDestination = "platform=iOS Simulator,name=iPhone 8"
         let destination = destination?.description ?? defaultDestination
 
-        let testCommand = CommandBuilder("set -o pipefail && xcodebuild")
+        let xcodebuild = CommandBuilder("cd")
+            .append("\(project.workingDirectory.absolutePath)")
+            .append("&&")
+            .append("set")
+            .append("-o")
+            .append("pipefail")
+            .append("&&")
+            .append("xcodebuild")
             .append(testWithoutBuilding ? "test-without-building" : "test")
-            .append("-project", value: project)
-            .append("-workspace", value: workspace)
-            .append("-scheme", value: scheme)
+            .append("-project", value: project.projectPath)
+            .append("-workspace", value: project.workspacePath)
+            .append("-scheme", value: project.scheme)
             .append("-destination", value: "\'\(destination)\'")
             .append("| xcpretty", flag: xcpretty)
-        return testCommand
+        return xcodebuild
     }
 }
 
 public extension Action {
-    @discardableResult
     func testXcodeProject(
-        project: String? = nil,
-        scheme: String? = nil,
+        project: Project,
         destination: BuildOptions.Destination? = nil,
         testWithoutBuilding: Bool = false,
         xcpretty: Bool = false
-    ) async throws -> String {
+    ) async throws {
         try await action(
             TestXcodeProjectAction(
                 project: project,
-                scheme: scheme,
                 destination: destination,
                 testWithoutBuilding: testWithoutBuilding,
                 xcpretty: xcpretty
