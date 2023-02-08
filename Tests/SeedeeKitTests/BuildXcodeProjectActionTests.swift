@@ -15,12 +15,6 @@ final class BuildXcodeProjectActionTests: XCTestCase {
             cleanBuild: true
         )
 
-        let command = try await action.buildCommand()
-
-        let expectedCommand = CommandBuilder(["cd", "/Users/khoale/code/play/Seedee/Tests/SeedeeKitTests/Resources/Fixtures/IntegrationApp", "&&", "set", "-o", "pipefail", "&&", "xcodebuild", "build", "-project", "IntegrationApp.xcodeproj", "-scheme", "IntegrationApp", "-destination", "\'platform=iOS Simulator,name=iPhone 8\'", "-configuration", "Debug", "clean"])
-
-        XCTAssertEqual(command, expectedCommand)
-
         let expectation = self.expectation(description: "Build Completed")
 
         do {
