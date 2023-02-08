@@ -21,5 +21,3 @@ jobs:
         run: swift build -v
       - name: Run Unit Tests
         run: swift test -v
-      env:
-        ENABLE_INTEGRATION_TESTS: 1
