@@ -8,12 +8,12 @@ final class TestXcodeProjectActionTests: XCTestCase {
             workingDirectory: integrationAppPath,
             projectPath: "IntegrationApp.xcodeproj",
             scheme: "IntegrationApp")
-        
+
         let action = TestXcodeProjectAction(project: project)
         let executor = ProcessExecutor()
-        
+
         let expectation = self.expectation(description: "Build Completed")
-        
+
         do {
             let command = try await action.buildCommand().command
             let output = try await executor.execute(command)
@@ -22,7 +22,7 @@ final class TestXcodeProjectActionTests: XCTestCase {
         } catch {
             XCTFail("Failed to run \(error)")
         }
-        
+
         await waitForExpectations(timeout: 300)
     }
 }
