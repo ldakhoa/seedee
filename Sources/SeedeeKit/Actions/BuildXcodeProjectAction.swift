@@ -1,11 +1,9 @@
 import Foundation
 
-public struct BuildXcodeProjectAction: Action {
-    public let name = "Build Xcode Project"
+struct BuildXcodeProjectAction: Action {
+    let name = "Build Xcode Project"
 
-    private let project: String?
-    private let workspace: String?
-    private let scheme: String?
+    private let project: Project
     private let buildConfiguration: BuildOptions.BuildConfiguration?
     private let destination: BuildOptions.Destination?
     private let buildForTesting: Bool
@@ -13,13 +11,11 @@ public struct BuildXcodeProjectAction: Action {
     private let archivePath: String?
     private let projectVersion: String?
     private let xcpretty: Bool
-    private let workingDirectory: String?
     private let quiet: Bool
+    private let executor: any Executor
 
-    public init(
-        project: String? = nil,
-        workspace: String? = nil,
-        scheme: String? = nil,
+    init(
+        project: Project,
         buildConfiguration: BuildOptions.BuildConfiguration? = nil,
         destination: BuildOptions.Destination? = nil,
         buildForTesting: Bool = false,
@@ -27,12 +23,10 @@ public struct BuildXcodeProjectAction: Action {
         archivePath: String? = nil,
         projectVersion: String? = nil,
         xcpretty: Bool = false,
-        workingDirectory: String? = nil,
-        quiet: Bool = false
+        quiet: Bool = false,
+        executor: any Executor = ProcessExecutor()
     ) {
         self.project = project
-        self.workspace = workspace
-        self.scheme = scheme
         self.buildConfiguration = buildConfiguration
         self.destination = destination
         self.buildForTesting = buildForTesting
@@ -40,51 +34,54 @@ public struct BuildXcodeProjectAction: Action {
         self.archivePath = archivePath
         self.projectVersion = projectVersion
         self.xcpretty = xcpretty
-        self.workingDirectory = workingDirectory
         self.quiet = quiet
+        self.executor = executor
     }
 
-    public func run() async throws -> String {
-        try await executor.shell(buildCommand(), workingDirectory: workingDirectory, quiet: quiet)
+    @discardableResult
+    func run() async throws -> ExecutorResult {
+        let buildCommand = try await buildCommand().command
+        return try await executor.execute(buildCommand)
     }
 
-    public func buildCommand() async throws -> CommandBuilder {
+    func buildCommand() async throws -> CommandBuilder {
         let defaultDestination = "platform=iOS Simulator,name=iPhone 8"
         let destination = destination?.description ?? defaultDestination
 
         let buildCommand = buildForTesting ? "build-for-testing" : "build"
 
-        let xcodebuild = CommandBuilder("set -o pipefail && xcodebuild")
+        let xcodebuild = CommandBuilder("cd")
+            .append("\(project.workingDirectory.absolutePath)")
+            .append("&&")
+            .append("set")
+            .append("-o")
+            .append("pipefail")
+            .append("&&")
+            .append("xcodebuild")
             .append(archivePath != nil ? "archive -archivePath \(archivePath!)" : buildCommand)
-            .append("-project", value: project)
-            .append("-workspace", value: workspace)
-            .append("-scheme", value: scheme)
+            .append("-project", value: project.projectPath)
+            .append("-workspace", value: project.workspacePath)
+            .append("-scheme", value: project.scheme)
             .append("-destination", value: "\'\(destination)\'")
             .append("-configuration", value: buildConfiguration?.settingsValue)
             .append("CURRENT_PROJECT_VERSION", "=", value: projectVersion)
             .append("clean", flag: cleanBuild)
             .append("| xcpretty", flag: xcpretty)
-
         return xcodebuild
     }
 }
 
 public extension Action {
-    @discardableResult
     func buildXcodeProject(
-        project: String? = nil,
-        workspace: String? = nil,
-        scheme: String? = nil,
+        project: Project,
         buildConfiguration: BuildOptions.BuildConfiguration? = nil,
         destination: BuildOptions.Destination? = nil,
         cleanBuild: Bool = false,
         archivePath: String? = nil
-    ) async throws -> String {
+    ) async throws {
         try await action(
             BuildXcodeProjectAction(
                 project: project,
-                workspace: workspace,
-                scheme: scheme,
                 buildConfiguration: buildConfiguration,
                 destination: destination,
                 cleanBuild: cleanBuild,

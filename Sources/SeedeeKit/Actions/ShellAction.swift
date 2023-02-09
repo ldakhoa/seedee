@@ -16,7 +16,8 @@ public struct ShellAction: Action {
 
     @discardableResult
     public func run() async throws -> String {
-        try executor.shell(commandBuilder, workingDirectory: workingDirectory)
+//        try executor.shell(commandBuilder, workingDirectory: workingDirectory)
+        ""
     }
 }
 
