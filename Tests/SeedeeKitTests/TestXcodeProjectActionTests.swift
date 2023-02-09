@@ -10,19 +10,8 @@ final class TestXcodeProjectActionTests: XCTestCase {
             scheme: "IntegrationApp")
 
         let action = TestXcodeProjectAction(project: project)
-        let executor = ProcessExecutor()
 
-        let expectation = self.expectation(description: "Build Completed")
-
-        do {
-            let command = try await action.buildCommand().command
-            let output = try await executor.execute(command)
-            print(try output.unwrapOutput())
-            expectation.fulfill()
-        } catch {
-            XCTFail("Failed to run \(error)")
-        }
-
-        await waitForExpectations(timeout: 300)
+        let output = try await action.run()
+        XCTAssertEqual(output.exitStatus, .terminated(code: 0))
     }
 }

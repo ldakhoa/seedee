@@ -15,17 +15,8 @@ final class BuildXcodeProjectActionTests: XCTestCase {
             cleanBuild: true
         )
 
-        let expectation = self.expectation(description: "Build Completed")
-
-        do {
-            let result = try await action.run()
-            XCTAssertEqual(result.exitStatus, .terminated(code: 0))
-            expectation.fulfill()
-        } catch {
-            XCTFail("Failed to run \(error)")
-        }
-
-        await waitForExpectations(timeout: 300)
+        let result = try await action.run()
+        XCTAssertEqual(result.exitStatus, .terminated(code: 0))
     }
 
     func test_buildXcodeProject_xcprettyEnable() async throws {
@@ -40,17 +31,8 @@ final class BuildXcodeProjectActionTests: XCTestCase {
             xcpretty: true
         )
 
-        let expectation = self.expectation(description: "Build Completed")
-
-        do {
-            let result = try await action.run()
-            XCTAssertEqual(result.exitStatus, .terminated(code: 0))
-            expectation.fulfill()
-        } catch {
-            XCTFail("Failed to run \(error)")
-        }
-
-        await waitForExpectations(timeout: 300)
+        let result = try await action.run()
+        XCTAssertEqual(result.exitStatus, .terminated(code: 0))
     }
 
     func test_buildXcodeProject_buildForTestingEnable() async throws {
@@ -65,17 +47,7 @@ final class BuildXcodeProjectActionTests: XCTestCase {
             buildForTesting: true,
             xcpretty: true
         )
-
-        let expectation = self.expectation(description: "Build Completed")
-
-        do {
-            let result = try await action.run()
-            XCTAssertEqual(result.exitStatus, .terminated(code: 0))
-            expectation.fulfill()
-        } catch {
-            XCTFail("Failed to run \(error)")
-        }
-
-        await waitForExpectations(timeout: 300)
+        let result = try await action.run()
+        XCTAssertEqual(result.exitStatus, .terminated(code: 0))
     }
 }
