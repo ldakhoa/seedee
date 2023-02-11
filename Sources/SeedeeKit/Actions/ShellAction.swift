@@ -18,8 +18,18 @@ struct ShellAction: Action {
     }
 
     @discardableResult
-    func run() async throws -> String {
-        ""
+    func run() async throws -> ExecutorResult {
+        return try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<ExecutorResult, Swift.Error>) in
+            executor.execute(commandBuilder.command, workingDirectory: workingDirectory) { result in
+                switch result {
+                case let .success(executorResult):
+                    continuation.resume(returning: executorResult)
+                case let .failure(error):
+                    logger.error("Unable to run `shellAction` \(error.message)")
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
     }
 }
 
@@ -28,7 +38,7 @@ public extension Action {
     func shell(
         _ builder: CommandBuilder,
         workingDirectory: URL = URL(fileURLWithPath: ".")
-    ) async throws -> String {
+    ) async throws -> ExecutorResult {
         try await action(ShellAction(
             commandBuilder: builder,
             workingDirectory: workingDirectory))

@@ -32,7 +32,7 @@ extension Executor {
     }
 }
 
-struct ExecutorResult {
+public struct ExecutorResult {
     let arguments: String
     let terminationStatus: Int32
     let output: String
