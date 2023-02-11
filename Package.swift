@@ -20,8 +20,6 @@ let package = Package(
         .executable(name: "Example", targets: ["Example"])
     ],
     dependencies: [
-        .package(url: "https://github.com/apple/swift-package-manager.git",
-                 revision: "swift-DEVELOPMENT-SNAPSHOT-2023-02-06-a"),
         .package(url: "https://github.com/apple/swift-argument-parser.git",
                  .upToNextMinor(from: "1.1.4")),
         .package(url: "https://github.com/apple/swift-log.git",
@@ -39,7 +37,6 @@ let package = Package(
         .target(
             name: "SeedeeKit",
             dependencies: [
-                .product(name: "SwiftPMDataModel-auto", package: "swift-package-manager"),
                 .product(name: "Logging", package: "swift-log"),
                 .product(name: "Rainbow", package: "Rainbow"),
             ]),

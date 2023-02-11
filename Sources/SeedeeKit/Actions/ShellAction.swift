@@ -1,23 +1,25 @@
 import Foundation
 
-public struct ShellAction: Action {
-    public let name = "Run Shell"
+struct ShellAction: Action {
+    let name = "Run Shell"
 
     let commandBuilder: CommandBuilder
-    let workingDirectory: String?
+    let workingDirectory: URL
+    private let executor: any Executor
 
-    public init(
+    init(
         commandBuilder: CommandBuilder,
-        workingDirectory: String? = nil
+        workingDirectory: URL = URL(fileURLWithPath: "."),
+        executor: any Executor = ProcessExecutor()
     ) {
         self.commandBuilder = commandBuilder
         self.workingDirectory = workingDirectory
+        self.executor = executor
     }
 
     @discardableResult
-    public func run() async throws -> String {
-//        try executor.shell(commandBuilder, workingDirectory: workingDirectory)
-        ""
+    func run() async throws -> String {
+        try executor.execute(commandBuilder.command, workingDirectory: workingDirectory).output
     }
 }
 
@@ -25,8 +27,10 @@ public extension Action {
     @discardableResult
     func shell(
         _ builder: CommandBuilder,
-        workingDirectory: String? = nil
+        workingDirectory: URL = URL(fileURLWithPath: ".")
     ) async throws -> String {
-        try await action(ShellAction(commandBuilder: builder, workingDirectory: workingDirectory))
+        try await action(ShellAction(
+            commandBuilder: builder,
+            workingDirectory: workingDirectory))
     }
 }

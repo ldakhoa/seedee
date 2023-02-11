@@ -26,27 +26,38 @@ struct TestXcodeProjectAction: Action {
     @discardableResult
     func run() async throws -> ExecutorResult {
         let buildCommand = try await buildCommand().command
-        return try await executor.execute(buildCommand)
+        return try executor.execute(
+            buildCommand,
+            workingDirectory: project.workingDirectory
+        )
     }
 
     public func buildCommand() async throws -> CommandBuilder {
         let defaultDestination = "platform=iOS Simulator,name=iPhone 8"
         let destination = destination?.description ?? defaultDestination
 
-        let xcodebuild = CommandBuilder("cd")
-            .append("\(project.workingDirectory.absolutePath)")
-            .append("&&")
-            .append("set")
-            .append("-o")
-            .append("pipefail")
-            .append("&&")
-            .append("xcodebuild")
+        let xcodebuild = CommandBuilder("set -o pipefail && xcodebuild")
             .append(testWithoutBuilding ? "test-without-building" : "test")
             .append("-project", value: project.projectPath)
             .append("-workspace", value: project.workspacePath)
             .append("-scheme", value: project.scheme)
             .append("-destination", value: "\'\(destination)\'")
             .append("| xcpretty", flag: xcpretty)
+
+//        let xcodebuild = CommandBuilder("cd")
+//            .append("\(project.workingDirectory.absolutePath)")
+//            .append("&&")
+//            .append("set")
+//            .append("-o")
+//            .append("pipefail")
+//            .append("&&")
+//            .append("xcodebuild")
+//            .append(testWithoutBuilding ? "test-without-building" : "test")
+//            .append("-project", value: project.projectPath)
+//            .append("-workspace", value: project.workspacePath)
+//            .append("-scheme", value: project.scheme)
+//            .append("-destination", value: "\'\(destination)\'")
+//            .append("| xcpretty", flag: xcpretty)
         return xcodebuild
     }
 }

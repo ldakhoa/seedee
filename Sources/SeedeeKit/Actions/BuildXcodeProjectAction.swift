@@ -41,7 +41,10 @@ struct BuildXcodeProjectAction: Action {
     @discardableResult
     func run() async throws -> ExecutorResult {
         let buildCommand = try await buildCommand().command
-        return try await executor.execute(buildCommand)
+        return try executor.execute(
+            buildCommand,
+            workingDirectory: project.workingDirectory
+        )
     }
 
     func buildCommand() async throws -> CommandBuilder {
@@ -50,14 +53,7 @@ struct BuildXcodeProjectAction: Action {
 
         let buildCommand = buildForTesting ? "build-for-testing" : "build"
 
-        let xcodebuild = CommandBuilder("cd")
-            .append("\(project.workingDirectory.absolutePath)")
-            .append("&&")
-            .append("set")
-            .append("-o")
-            .append("pipefail")
-            .append("&&")
-            .append("xcodebuild")
+        let xcodebuild = CommandBuilder("set -o pipefail && xcodebuild")
             .append(archivePath != nil ? "archive -archivePath \(archivePath!)" : buildCommand)
             .append("-project", value: project.projectPath)
             .append("-workspace", value: project.workspacePath)
@@ -67,6 +63,24 @@ struct BuildXcodeProjectAction: Action {
             .append("CURRENT_PROJECT_VERSION", "=", value: projectVersion)
             .append("clean", flag: cleanBuild)
             .append("| xcpretty", flag: xcpretty)
+
+//        let xcodebuild = CommandBuilder("cd")
+//            .append("\(project.workingDirectory.absolutePath)")
+//            .append("&&")
+//            .append("set")
+//            .append("-o")
+//            .append("pipefail")
+//            .append("&&")
+//            .append("xcodebuild")
+//            .append(archivePath != nil ? "archive -archivePath \(archivePath!)" : buildCommand)
+//            .append("-project", value: project.projectPath)
+//            .append("-workspace", value: project.workspacePath)
+//            .append("-scheme", value: project.scheme)
+//            .append("-destination", value: "\'\(destination)\'")
+//            .append("-configuration", value: buildConfiguration?.settingsValue)
+//            .append("CURRENT_PROJECT_VERSION", "=", value: projectVersion)
+//            .append("clean", flag: cleanBuild)
+//            .append("| xcpretty", flag: xcpretty)
         return xcodebuild
     }
 }

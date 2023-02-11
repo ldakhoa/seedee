@@ -11,7 +11,9 @@ final class TestXcodeProjectActionTests: XCTestCase {
 
         let action = TestXcodeProjectAction(project: project)
 
-        let output = try await action.run()
-        XCTAssertEqual(output.exitStatus, .terminated(code: 0))
+        let result = try await action.run()
+        print(result.output)
+        XCTAssertEqual(result.terminationStatus, 0)
+        XCTAssertTrue(result.output.lowercased().contains("** test succeeded**"))
     }
 }

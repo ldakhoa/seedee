@@ -1,61 +1,60 @@
 import Foundation
 
-public struct CommandBuilder: Equatable {
-    private(set) var command: [String]
+public struct CommandBuilder {
+    private(set) var command: String
 
     private init() {
-        self.command = []
+        self.command = ""
     }
 
-    public init(_ str: String) {
-        self.command = [str]
-    }
-
-    public init(_ str: [String]) {
-        self.command = str
+    public init(_ staticString: StaticString) {
+        self.command = "\(staticString)"
     }
 
     @discardableResult
     public func append(_ component: String) -> CommandBuilder {
         var newBuilder = self
-        newBuilder.command.append(component)
+        newBuilder.command.append(" \(component)")
         return newBuilder
     }
 
     @discardableResult
-    public func append(_ component: String?) -> CommandBuilder {
+    public func append(_ component: StaticString) -> CommandBuilder {
         var newBuilder = self
-        if let component = component {
-            newBuilder.command.append(component)
+        newBuilder.command.append(" \(component)")
+        return newBuilder
+    }
+
+    @discardableResult
+    public func append(_ component: StaticString?) -> CommandBuilder {
+        var newBuilder = self
+        if let component {
+            newBuilder.command.append(" \(component)")
         }
         return newBuilder
     }
 
     @discardableResult
     public func append(
-        _ option: String,
-        _ separator: String = " ",
+        _ option: StaticString,
+        _ separator: StaticString = " ",
         value: String?
     ) -> CommandBuilder {
         var newBuilder = self
-        if let value = value {
-            newBuilder.command.append(option)
-            if separator != " " {
-                newBuilder.command.append(separator)
-            }
-            newBuilder.command.append(value)
+        if let value {
+            newBuilder.command.append(" \(option)\(separator)\(value)")
         }
         return newBuilder
     }
 
     @discardableResult
     public func append(
-        _ component: String,
+        _ component: StaticString,
         flag: Bool
     ) -> CommandBuilder {
         var newBuilder = self
         if flag {
-            newBuilder.command.append(component)
+            newBuilder.command.append(" \(component)")
         }
         return newBuilder
     }
