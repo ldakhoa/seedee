@@ -6,26 +6,29 @@ protocol Executor {
     ///   - command: The command to run.
     ///   - arguments: The arguments to execute.
     ///   - workingDirectory: The path to the directory under which to run the process.
-    @discardableResult
+    ///   - completion:
+    ///   - completion: A completion to be fulfilled with a result is `ExecutorResult`.
     func execute(
         _ command: String,
         arguments: [String],
         workingDirectory: URL,
-        process: Process
-    ) throws -> ExecutorResult
+        process: Process,
+        completion: @escaping (Result<ExecutorResult, ExecutorError>) -> Void
+    )
 }
 
 extension Executor {
-    @discardableResult
     func execute(
         _ command: String,
-        workingDirectory: URL = URL(fileURLWithPath: ".")
-    ) throws -> ExecutorResult {
-        try execute(
+        workingDirectory: URL = URL(fileURLWithPath: "."),
+        completion: @escaping (Result<ExecutorResult, ExecutorError>) -> Void
+    ) {
+        execute(
             command,
             arguments: [],
             workingDirectory: workingDirectory,
-            process: .init())
+            process: .init(),
+            completion: completion)
     }
 }
 
@@ -35,35 +38,43 @@ struct ExecutorResult {
     let output: String
 }
 
+struct ExecutorError: Swift.Error {
+    /// The termination status of the command that was run
+    let terminationStatus: Int32
+    /// The error message as a UTF8 string, as returned through `STDERR`
+    var message: String { return errorData.shellOutput() }
+    /// The raw error buffer data, as returned through `STDERR`
+    let errorData: Data
+    /// The raw output buffer data, as retuned through `STDOUT`
+    let outputData: Data
+    /// The output of the command as a UTF8 string, as returned through `STDOUT`
+    var output: String { return outputData.shellOutput() }
+}
+
 struct ProcessExecutor: Executor {
-    /// Execute the command and arguments using `bash`.
-    /// - Parameters:
-    ///   - command: The command to run.
-    ///   - arguments: The arguments to execute.
-    ///   - workingDirectory: The path to the directory under which to run the process.
-    @discardableResult
     func execute(
-        _ command: String = "",
-        arguments: [String] = [],
+        _ command: String,
+        arguments: [String],
         workingDirectory: URL,
-        process: Process = .init()
-    ) throws -> ExecutorResult {
+        process: Process,
+        completion: @escaping (Result<ExecutorResult, ExecutorError>) -> Void
+    ) {
         let command = "cd \(workingDirectory.path.escapingSpaces) && \(command) \(arguments.joined(separator: " "))"
 
         logger.info("$ \(command)")
-        return try process.run(with: command)
+        process.run(with: command, completion: completion)
     }
 }
 
 // MARK: - Private
 
 private extension Process {
-    @discardableResult
     func run(
         with command: String,
         outputHandle: FileHandle? = nil,
-        errorHandle: FileHandle? = nil
-    ) throws -> ExecutorResult {
+        errorHandle: FileHandle? = nil,
+        completion: @escaping (Result<ExecutorResult, ExecutorError>) -> Void
+    ) {
         launchPath = "/bin/bash"
         arguments = ["-c", command]
 
@@ -126,37 +137,24 @@ private extension Process {
 
         // Block until all writes have occurred to outputData and errorData,
         // and then read the data back out.
-        return try outputQueue.sync {
-            if terminationStatus != 0 {
-                let error = Error(
+        outputQueue.sync {
+            if self.terminationStatus != 0 {
+                let error = ExecutorError(
                     terminationStatus: self.terminationStatus,
                     errorData: errorData,
                     outputData: outputData
                 )
 
-                logger.error(error.message)
-                throw error
+                completion(.failure(error))
+            } else {
+                let result = ExecutorResult(
+                    arguments: command,
+                    terminationStatus: self.terminationStatus,
+                    output: outputData.shellOutput()
+                )
+                completion(.success(result))
             }
-
-            return ExecutorResult(
-                arguments: command,
-                terminationStatus: terminationStatus,
-                output: outputData.shellOutput()
-            )
         }
-    }
-
-    struct Error: Swift.Error {
-        /// The termination status of the command that was run
-        let terminationStatus: Int32
-        /// The error message as a UTF8 string, as returned through `STDERR`
-        var message: String { return errorData.shellOutput() }
-        /// The raw error buffer data, as returned through `STDERR`
-        let errorData: Data
-        /// The raw output buffer data, as retuned through `STDOUT`
-        let outputData: Data
-        /// The output of the command as a UTF8 string, as returned through `STDOUT`
-        var output: String { return outputData.shellOutput() }
     }
 }
 

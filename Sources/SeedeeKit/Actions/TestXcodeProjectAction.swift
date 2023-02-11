@@ -26,10 +26,17 @@ struct TestXcodeProjectAction: Action {
     @discardableResult
     func run() async throws -> ExecutorResult {
         let buildCommand = try await buildCommand().command
-        return try executor.execute(
-            buildCommand,
-            workingDirectory: project.workingDirectory
-        )
+        return try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<ExecutorResult, Swift.Error>) in
+            executor.execute(buildCommand, workingDirectory: project.workingDirectory) { result in
+                switch result {
+                case let .success(executorResult):
+                    continuation.resume(returning: executorResult)
+                case let .failure(error):
+                    logger.error("Unable to run `testXcodeProjectAction` \(error.message)")
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
     }
 
     public func buildCommand() async throws -> CommandBuilder {
@@ -44,20 +51,6 @@ struct TestXcodeProjectAction: Action {
             .append("-destination", value: "\'\(destination)\'")
             .append("| xcpretty", flag: xcpretty)
 
-//        let xcodebuild = CommandBuilder("cd")
-//            .append("\(project.workingDirectory.absolutePath)")
-//            .append("&&")
-//            .append("set")
-//            .append("-o")
-//            .append("pipefail")
-//            .append("&&")
-//            .append("xcodebuild")
-//            .append(testWithoutBuilding ? "test-without-building" : "test")
-//            .append("-project", value: project.projectPath)
-//            .append("-workspace", value: project.workspacePath)
-//            .append("-scheme", value: project.scheme)
-//            .append("-destination", value: "\'\(destination)\'")
-//            .append("| xcpretty", flag: xcpretty)
         return xcodebuild
     }
 }

@@ -41,10 +41,17 @@ struct BuildXcodeProjectAction: Action {
     @discardableResult
     func run() async throws -> ExecutorResult {
         let buildCommand = try await buildCommand().command
-        return try executor.execute(
-            buildCommand,
-            workingDirectory: project.workingDirectory
-        )
+        return try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<ExecutorResult, Swift.Error>) in
+            executor.execute(buildCommand, workingDirectory: project.workingDirectory) { result in
+                switch result {
+                case let .success(executorResult):
+                    continuation.resume(returning: executorResult)
+                case let .failure(error):
+                    logger.error("Unable to run `buildXcodeProjectAction` \(error.message)")
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
     }
 
     func buildCommand() async throws -> CommandBuilder {
@@ -64,23 +71,6 @@ struct BuildXcodeProjectAction: Action {
             .append("clean", flag: cleanBuild)
             .append("| xcpretty", flag: xcpretty)
 
-//        let xcodebuild = CommandBuilder("cd")
-//            .append("\(project.workingDirectory.absolutePath)")
-//            .append("&&")
-//            .append("set")
-//            .append("-o")
-//            .append("pipefail")
-//            .append("&&")
-//            .append("xcodebuild")
-//            .append(archivePath != nil ? "archive -archivePath \(archivePath!)" : buildCommand)
-//            .append("-project", value: project.projectPath)
-//            .append("-workspace", value: project.workspacePath)
-//            .append("-scheme", value: project.scheme)
-//            .append("-destination", value: "\'\(destination)\'")
-//            .append("-configuration", value: buildConfiguration?.settingsValue)
-//            .append("CURRENT_PROJECT_VERSION", "=", value: projectVersion)
-//            .append("clean", flag: cleanBuild)
-//            .append("| xcpretty", flag: xcpretty)
         return xcodebuild
     }
 }

@@ -19,7 +19,7 @@ struct ShellAction: Action {
 
     @discardableResult
     func run() async throws -> String {
-        try executor.execute(commandBuilder.command, workingDirectory: workingDirectory).output
+        ""
     }
 }
 
