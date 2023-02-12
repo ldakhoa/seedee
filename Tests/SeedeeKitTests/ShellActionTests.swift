@@ -18,7 +18,7 @@ final class ShellActionTests: XCTestCase {
         let action = ShellAction(commandBuilder: commandBuilder, workingDirectory: integrationAppPath)
         do {
             try await action.run()
-            XCTFail("It should be fail")
+            XCTFail("Test should be failed")
         } catch let error as NSError {
             XCTAssertEqual(error.code, 1)
         }
