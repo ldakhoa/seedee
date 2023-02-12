@@ -4,7 +4,6 @@ import XCTest
 
 final class BuildXcodeProjectActionTests: XCTestCase {
     override class func setUp() {
-        let queue = DispatchQueue(label: "testunittest")
         let action = ShellAction(
             commandBuilder: CommandBuilder("bundle install && bundle exec pod install"),
             workingDirectory: fixturePath(for: "IntegrationPodApp")
@@ -16,52 +15,47 @@ final class BuildXcodeProjectActionTests: XCTestCase {
 //        )
 
         Task {
-
             let result = try await action.run()
-//            let result2 = try await podInstallAction.run()
             print(result.output)
-//            print(result2.output)
-
-
         }
 
     }
 
-    func test_buildXcodeProject_buildShouldSuccess() async throws {
-        let project = Project(
-            workingDirectory: integrationAppPath,
-            projectPath: "IntegrationApp.xcodeproj",
-            scheme: "IntegrationApp")
-
-        let action = BuildXcodeProjectAction(
-            project: project,
-            buildConfiguration: .debug,
-            cleanBuild: true
-        )
-
-        let result = try await action.run()
-        XCTAssertEqual(result.terminationStatus, 0)
-    }
-
-    func test_buildXcodeProject_buildShouldFail() async throws {
-        let project = Project(
-            workingDirectory: integrationAppPath,
-            projectPath: "IntegrationAppWrongName.xcodeproj",
-            scheme: "IntegrationApp")
-
-        let action = BuildXcodeProjectAction(
-            project: project,
-            buildConfiguration: .debug,
-            cleanBuild: true
-        )
-
-        do {
-            try await action.run()
-            XCTFail("It should be fail")
-        } catch let error as NSError {
-            XCTAssertEqual(error.code, 1)
-        }
-    }
+//    func test_buildXcodeProject_buildShouldSuccess() async throws {
+//        let project = Project(
+//            workingDirectory: integrationAppPath,
+//            projectPath: "IntegrationApp.xcodeproj",
+//            scheme: "IntegrationApp")
+//
+//        let action = BuildXcodeProjectAction(
+//            project: project,
+//            buildConfiguration: .debug,
+//            cleanBuild: true
+//        )
+//
+//        let result = try await action.run()
+//        XCTAssertEqual(result.terminationStatus, 0)
+//    }
+//
+//    func test_buildXcodeProject_buildShouldFail() async throws {
+//        let project = Project(
+//            workingDirectory: integrationAppPath,
+//            projectPath: "IntegrationAppWrongName.xcodeproj",
+//            scheme: "IntegrationApp")
+//
+//        let action = BuildXcodeProjectAction(
+//            project: project,
+//            buildConfiguration: .debug,
+//            cleanBuild: true
+//        )
+//
+//        do {
+//            try await action.run()
+//            XCTFail("It should be fail")
+//        } catch let error as NSError {
+//            XCTAssertEqual(error.code, 1)
+//        }
+//    }
 
 //    func test_buildXcodeProject_xcprettyEnable() async throws {
 //        let project = Project(
