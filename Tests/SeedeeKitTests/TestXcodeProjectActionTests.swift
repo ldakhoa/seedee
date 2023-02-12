@@ -1,8 +1,8 @@
-//import Foundation
-//import XCTest
-//@testable import SeedeeKit
+// import Foundation
+// import XCTest
+// @testable import SeedeeKit
 //
-//final class TestXcodeProjectActionTests: XCTestCase {
+// final class TestXcodeProjectActionTests: XCTestCase {
 //    func test_testXcodeProject_buildShouldSuccess() async throws {
 //        let project = Project(
 //            workingDirectory: integrationAppPath,
@@ -31,4 +31,4 @@
 //            XCTAssertEqual(error.code, 1)
 //        }
 //    }
-//}
+// }

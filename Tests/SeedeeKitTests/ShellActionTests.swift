@@ -1,7 +1,7 @@
-//import XCTest
-//@testable import SeedeeKit
+// import XCTest
+// @testable import SeedeeKit
 //
-//final class ShellActionTests: XCTestCase {
+// final class ShellActionTests: XCTestCase {
 //    func test_runShell() async throws {
 //        let commandBuilder = CommandBuilder("ls")
 //
@@ -23,4 +23,4 @@
 //            XCTAssertEqual(error.code, 1)
 //        }
 //    }
-//}
+// }
