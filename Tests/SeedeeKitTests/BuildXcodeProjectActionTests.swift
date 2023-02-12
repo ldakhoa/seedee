@@ -3,6 +3,16 @@ import XCTest
 @testable import SeedeeKit
 
 final class BuildXcodeProjectActionTests: XCTestCase {
+    override func setUp() async throws {
+        try await super.setUp()
+        let action = ShellAction(
+            commandBuilder: CommandBuilder("bundle install && bundle exec pod install"),
+            workingDirectory: fixturePath(for: "IntegrationPodApp")
+        )
+
+        try await action.run()
+    }
+
     func test_buildXcodeProject_buildShouldSuccess() async throws {
         let project = Project(
             workingDirectory: integrationAppPath,
