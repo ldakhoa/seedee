@@ -52,7 +52,7 @@ final class BuildXcodeProjectActionTests: XCTestCase {
 
         do {
             try await action.run()
-            XCTFail("It should be fail")
+            XCTFail("Test should be failed")
         } catch let error as NSError {
             XCTAssertEqual(error.code, 1)
         }
