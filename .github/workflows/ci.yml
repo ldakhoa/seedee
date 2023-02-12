@@ -21,3 +21,5 @@ jobs:
         run: swift build -v
       - name: Run Unit Tests
         run: swift test -v
+        env:
+          SHOULD_SETUP_COCOAPODS: 1

@@ -5,12 +5,21 @@ import XCTest
 final class BuildXcodeProjectActionTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
-        let action = ShellAction(
-            commandBuilder: CommandBuilder("bundle install && bundle exec pod install"),
-            workingDirectory: fixturePath(for: "IntegrationPodApp")
-        )
 
-        try await action.run()
+        if shouldSetUpCocoaPods {
+            let action = ShellAction(
+                commandBuilder: CommandBuilder("bundle install && bundle exec pod install"),
+                workingDirectory: fixturePath(for: "IntegrationPodApp")
+            )
+            try await action.run()
+        }
+    }
+
+    var shouldSetUpCocoaPods: Bool {
+        if let value = ProcessInfo.processInfo.environment["SHOULD_SETUP_COCOAPODS"], !value.isEmpty {
+            return true
+        }
+        return false
     }
 
     func test_buildXcodeProject_buildShouldSuccess() async throws {
@@ -49,22 +58,23 @@ final class BuildXcodeProjectActionTests: XCTestCase {
         }
     }
 
-//    func test_buildXcodeProject_xcprettyEnable() async throws {
-//        let project = Project(
-//            workingDirectory: fixturePath(for: "IntegrationPodApp"),
-//            workspacePath: "IntegrationPodApp.xcworkspace",
-//            scheme: "IntegrationPodApp")
-//
-//        let action = BuildXcodeProjectAction(
-//            project: project,
-//            buildConfiguration: .debug,
-//            xcpretty: true
-//        )
-//
-//        let result = try await action.run()
-//        print(result.output)
-//        XCTAssertEqual(result.terminationStatus, 0)
-//    }
+    func test_buildXcodeProject_xcprettyEnable() async throws {
+        let project = Project(
+            workingDirectory: fixturePath(for: "IntegrationPodApp"),
+            workspacePath: "IntegrationPodApp.xcworkspace",
+            scheme: "IntegrationPodApp")
+
+        let action = BuildXcodeProjectAction(
+            project: project,
+            buildConfiguration: .debug,
+            xcpretty: true
+        )
+
+        let result = try await action.run()
+
+        XCTAssertEqual(result.terminationStatus, 0)
+        XCTAssertTrue(result.output.contains("Build Succeeded"))
+    }
 
     func test_buildXcodeProject_buildForTestingEnable() async throws {
         let project = Project(
