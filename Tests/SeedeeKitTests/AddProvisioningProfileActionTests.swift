@@ -22,7 +22,7 @@ final class AddProvisioningProfileActionTests: XCTestCase {
         let action = AddProvisioningProfileAction(provisioningProfilePath: mockProvisioningProfilePath)
 
         XCTAssertEqual(action.provisioningProfilePath, mockProvisioningProfilePath)
-        
+
         let provisioningProfile = try await action.run()
 
         XCTAssertEqual(provisioningProfile.name, "iOS Team Provisioning Profile: com.ldakhoa.IntegrationPodApp")
