@@ -1,6 +1,15 @@
 {
   "pins" : [
     {
+      "identity" : "appstoreconnect-swift-sdk",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/AvdLee/appstoreconnect-swift-sdk.git",
+      "state" : {
+        "revision" : "23d108de618a136e71bd53ad479439b80379e2ae",
+        "version" : "2.3.0"
+      }
+    },
+    {
       "identity" : "rainbow",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/onevcat/Rainbow",
@@ -25,6 +34,15 @@
       "state" : {
         "revision" : "6fe203dc33195667ce1759bf0182975e4653ba1c",
         "version" : "1.4.4"
+      }
+    },
+    {
+      "identity" : "urlqueryencoder",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/CreateAPI/URLQueryEncoder.git",
+      "state" : {
+        "revision" : "4ce950479707ea109f229d7230ec074a133b15d7",
+        "version" : "0.2.1"
       }
     }
   ],

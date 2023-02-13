@@ -1,12 +1,6 @@
-//
-//  File.swift
-//  
-//
-//  Created by Khoa Le on 08/02/2023.
-//
-
 import Foundation
 
+/// The metadata that contains `workingDirectory`, `projectPath`, `workspacePath` and `scheme`.
 public struct Project {
     /// The working directory URL.
     let workingDirectory: URL
