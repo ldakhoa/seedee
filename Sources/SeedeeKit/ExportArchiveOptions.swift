@@ -1,5 +1,6 @@
 import Foundation
 
+// swiftlint:disable line_length
 /// An object that configures archive exporting.
 public struct ExportArchiveOptions: Encodable {
     /// A boolean value that indicates whether to include bitcode in the app archive.
@@ -14,8 +15,7 @@ public struct ExportArchiveOptions: Encodable {
     /// An option for the exportOptions.plist file used to specify the signing style to use when exporting an app.
     let signingStyle: SigningStyle
 
-    /// `stripSwiftSymbols` is an option for the `exportOptions.plist` file
-    /// used to specify whether Swift symbols should be stripped from the binary when exporting an app.
+    /// An option for the `exportOptions.plist` file used to specify whether Swift symbols should be stripped from the binary when exporting an app.
     let stripSwiftSymbols: Bool
 
     /// The team id of the team that is used to sign the app.
@@ -27,14 +27,10 @@ public struct ExportArchiveOptions: Encodable {
     /// A boolean value that indicates whether Xcode should manage the app's build number when uploading to App Store Connect.
     let manageAppVersionAndBuildNumber: Bool
 
-    /// An optional key that can be used in the `exportOptions.plist` file
-    /// to specify a different bundle identifier for the app that is being exported,
-    /// as compared to the bundle identifier that is defined in your Xcode project.
+    /// An optional key that can be used in the `exportOptions.plist` file to specify a different bundle identifier for the app that is being exported, as compared to the bundle identifier that is defined in your Xcode project.
     let distributionBundleIdentifier: String?
 
-    /// A provisioning profile is a configuration file that includes information about the developer
-    /// and the devices or simulators that are allowed to run the app.
-    /// Xcode uses the provisioning profile to sign the app and to enable it to run on the intended devices.
+    /// A provisioning profile is a configuration file that includes information about the developer and the devices or simulators that are allowed to run the app. Xcode uses the provisioning profile to sign the app and to enable it to run on the intended devices.
     let provisioningProfiles: [String: String]?
 
     /// Containing information about the app archive, users can download app on the web by opening your distribution manifest file.
@@ -58,14 +54,16 @@ public struct ExportArchiveOptions: Encodable {
     /// A boolean value that indicates the signing certificate that can be used for code signing.
     let embedOnDemandResourcesAssetPacksInBundle: Bool
 
+    /// Available options vary depending on the type of provisioning profile used.
+    let iCloudContainerEnvironment: String?
+
     /// Init the `ExportArchiveOptions`.
     /// - Parameters:
     ///   - compileBitcode: A boolean value that indicates whether to include bitcode in the app archive. Defaults to `True`
     ///   - destination: An option that will export locally or upload to Apple.
     ///   - method: The method used to export the archive.
     ///   - signingStyle: An option for the exportOptions.plist file used to specify the signing style to use when exporting an app.
-    ///   - stripSwiftSymbols:An option for the `exportOptions.plist` file. Defaults to `True`
-    ///   used to specify whether Swift symbols should be stripped from the binary when exporting an app.
+    ///   - stripSwiftSymbols: An option for the `exportOptions.plist` file used to specify whether Swift symbols should be stripped from the binary when exporting an app. Defaults to `True`.
     ///   - teamID: The team id of the team that is used to sign the app.
     ///   - uploadSymbols: A boolean value that indicates whether the package include symbols.
     ///   - manageAppVersionAndBuildNumber: A boolean value that indicates whether. Defaults to `true`
@@ -83,6 +81,7 @@ public struct ExportArchiveOptions: Encodable {
     ///   - embedOnDemandResourcesAssetPacksInBundle: A signing certificate that can be used for code signing. Defaults to `true`.
     ///   - generateAppStoreInformation: A signing certificate that can be used for code signing. Defaults to `false`.
     ///   - onDemandResourcesAssetPacksBaseURL: A signing certificate that can be used for code signing.
+    ///   - iCloudContainerEnvironment: Available options vary depending on the type of provisioning profile used.
     public init(
         compileBitcode: Bool = true,
         destination: Destination = .export,
@@ -100,7 +99,8 @@ public struct ExportArchiveOptions: Encodable {
         installerSigningCertificate: SigningCertificate<InstallerAutomaticType>?,
         embedOnDemandResourcesAssetPacksInBundle: Bool = true,
         generateAppStoreInformation: Bool = false,
-        onDemandResourcesAssetPacksBaseURL: String? = nil
+        onDemandResourcesAssetPacksBaseURL: String? = nil,
+        iCloudContainerEnvironment: String? = nil
     ) {
         self.compileBitcode = compileBitcode
         self.destination = destination
@@ -119,8 +119,19 @@ public struct ExportArchiveOptions: Encodable {
         self.embedOnDemandResourcesAssetPacksInBundle = embedOnDemandResourcesAssetPacksInBundle
         self.generateAppStoreInformation = generateAppStoreInformation
         self.onDemandResourcesAssetPacksBaseURL = onDemandResourcesAssetPacksBaseURL
+        self.iCloudContainerEnvironment = iCloudContainerEnvironment
     }
 
+    // swiftlint:disable identifier_name
+    /// Convenience init that support builtin `method`.
+    /// - Parameters:
+    ///   - method: The method used to export the archive.
+    ///   - distribution: An enum representing the distribution type of the app.
+    ///   - signing: An enumeration representing different types of built-in signing for an Xcode project.
+    ///   - distributionBundleIdentifier: An optional key that can be used in the `exportOptions.plist` file to specify a different bundle identifier for the app that is being exported, as compared to the bundle identifier that is defined in your Xcode project.
+    ///   - iCloudContainerEnvironment: Available options vary depending on the type of provisioning profile used.
+    ///   - stripSwiftSymbols: An option for the `exportOptions.plist` file used to specify whether Swift symbols should be stripped from the binary when exporting an app.
+    ///   - teamID: The team id of the team that is used to sign the app.
     public init(
         method: Method,
         distribution: Distribution,
@@ -208,7 +219,8 @@ public struct ExportArchiveOptions: Encodable {
             installerSigningCertificate: installerSigningCertificate,
             embedOnDemandResourcesAssetPacksInBundle: embedOnDemandResourcesAssetPacksInBundle,
             generateAppStoreInformation: generateAppStoreInformation,
-            onDemandResourcesAssetPacksBaseURL: onDemandResourcesAssetPacksBaseURL
+            onDemandResourcesAssetPacksBaseURL: onDemandResourcesAssetPacksBaseURL,
+            iCloudContainerEnvironment: iCloudContainerEnvironment
         )
     }
 }
