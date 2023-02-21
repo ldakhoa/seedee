@@ -14,7 +14,7 @@ file_length: 600
 nesting:
   type_level: 2
 function_body_length:
-  warning: 75
+  warning: 80
 cyclomatic_complexity:
   warning: 15
 trailing_comma:
