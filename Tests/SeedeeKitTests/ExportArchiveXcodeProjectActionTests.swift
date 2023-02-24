@@ -6,31 +6,39 @@ import AppStoreConnect_Swift_SDK
 final class ExportArchiveXcodeProjectActionTests: XCTestCase {
 //    private let configuration = APIConfiguration.Key(privateKeyID: UUID().uuidString, issuerID: UUID().uuidString, privateKey: "MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgPaXyFvZfNydDEjxgjUCUxyGjXcQxiulEdGxoVbasV3GgCgYIKoZIzj0DAQehRANCAASflx/DU3TUWAoLmqE6hZL9A7i0DWpXtmIDCDiITRznC6K4/WjdIcuMcixy+m6O0IrffxJOablIX2VM8sHRscdr", path: nil)
 
-    var fileManager: FileManager!
+    var fileManager: FileManager = .default
     var project: Project!
 
     var testDirectory: String!
     var archivePath: String!
 
-    private var tempDirectory: String {
+    private var setupProvisioningProfile: Bool {
+        if let value = ProcessInfo.processInfo.environment["SETUP_PROVISIONING_PROFILE"], !value.isEmpty {
+            return true
+        }
+        return false
+    }
+
+    private var tempDirectory: String? {
         if let value = ProcessInfo.processInfo.environment["TEMP_DIR"], !value.isEmpty {
             return value
         }
         return fileManager.temporaryDirectory.path
     }
 
-    private var provisioningProfilePath: URL {
-        let path = URL(fileURLWithPath: "\(tempDirectory)/seedee_provisioning_profile.mobileprovision")
-        return path
+    private var provisioningProfilePath: URL? {
+        if let tempDirectory {
+            let path = URL(fileURLWithPath: "\(tempDirectory)/seedee_provisioning_profile.mobileprovision")
+            return path
+        }
+        return nil
     }
 
     override func setUp() {
         super.setUp()
 
-        fileManager = .default
-
-        testDirectory = "\(tempDirectory)/ExportArchiveXcodeProjectActionTests/"
-        archivePath = "\(tempDirectory)/ExportArchiveXcodeProjectActionTests.xcarchive"
+        testDirectory = "\(tempDirectory!)/ExportArchiveXcodeProjectActionTests/"
+        archivePath = "\(tempDirectory!)/ExportArchiveXcodeProjectActionTests.xcarchive"
 
         project = Project(
             workingDirectory: integrationAppPath,
@@ -41,16 +49,21 @@ final class ExportArchiveXcodeProjectActionTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
 
-        // add provisioning profile
-        let action = AddProvisioningProfileAction(provisioningProfilePath: provisioningProfilePath)
-        try await action.run()
+        if setupProvisioningProfile, let provisioningProfilePath {
+            // add provisioning profile
+            let action = AddProvisioningProfileAction(provisioningProfilePath: provisioningProfilePath)
+            try await action.run()
+        }
     }
 
     override func tearDownWithError() throws {
         try super.tearDownWithError()
         try fileManager.removeItem(atPath: testDirectory)
         try fileManager.removeItem(atPath: archivePath)
-        try fileManager.removeItem(at: provisioningProfilePath)
+
+        if setupProvisioningProfile, let provisioningProfilePath {
+            try fileManager.removeItem(at: provisioningProfilePath)
+        }
     }
 
     func test_exportArchive_whenGivenExportOptionsPlistPath() async throws {
@@ -74,7 +87,7 @@ final class ExportArchiveXcodeProjectActionTests: XCTestCase {
             project: project,
             archivePath: archivePath,
             exportPath: testDirectory,
-            exportOptionsPlistPath: "\(tempDirectory)/ExportOptions.plist"
+            exportOptionsPlistPath: "\(tempDirectory!)/ExportOptions.plist"
         )
 
         let result = try await action.run()
