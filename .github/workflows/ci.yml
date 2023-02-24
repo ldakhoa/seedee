@@ -31,7 +31,7 @@ jobs:
       - name: Create Provisoning Profile
         run: |
           echo "Creating Proviosing Profile"
-          echo "${{ secrets.PROVIOSING_PROFILE }}" > $TEMP_DIR/seedee_provisoning_profile.obileprovisioning
+          echo "${{ secrets.PROVISIONING_PROFILE }}" > $TEMP_DIR/seedee_provisoning_profile.obileprovisioning
       - name: Run Unit Tests
         run: swift test -v
         env:
