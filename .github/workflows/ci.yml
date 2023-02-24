@@ -19,6 +19,19 @@ jobs:
         run: swiftlint --strict
       - name: Build Package
         run: swift build -v
+      - name: Create temporary directory
+        id: create-temp-dir
+        run: |
+          temp_dir=$(mktemp -d)
+          echo "TEMP_DIR=$temp_dir" >> $GITHUB_ENV
+      - name: Create ExportOptions.plist file
+        run: |
+          echo "Creating ExportOptions.plist"
+          echo "${{ secrets.EXPORT_OPTIONS_PLIST }}" > $TEMP_DIR/ExportOptions.plist
+      - name: Create Provisoning Profile
+        run: |
+          echo "Creating Proviosing Profile"
+          echo "${{ secrets.PROVIOSING_PROFILE }}" > $TEMP_DIR/seedee_provisoning_profile.obileprovisioning
       - name: Run Unit Tests
         run: swift test -v
         env:

@@ -12,14 +12,25 @@ final class ExportArchiveXcodeProjectActionTests: XCTestCase {
     var testDirectory: String!
     var archivePath: String!
 
+    private var tempDirectory: String {
+        if let value = ProcessInfo.processInfo.environment["TEMP_DIR"], !value.isEmpty {
+            return value
+        }
+        return fileManager.temporaryDirectory.path
+    }
+
+    private var provisioningProfilePath: URL {
+        let path = URL(fileURLWithPath: "\(tempDirectory)/seedee_provisioning_profile.mobileprovision")
+        return path
+    }
+
     override func setUp() {
         super.setUp()
 
         fileManager = .default
 
-        let tempDirectory = NSTemporaryDirectory()
-        testDirectory = "\(tempDirectory)ExportArchiveXcodeProjectActionTests/"
-        archivePath = "\(tempDirectory)ExportArchiveXcodeProjectActionTests.xcarchive"
+        testDirectory = "\(tempDirectory)/ExportArchiveXcodeProjectActionTests/"
+        archivePath = "\(tempDirectory)/ExportArchiveXcodeProjectActionTests.xcarchive"
 
         project = Project(
             workingDirectory: integrationAppPath,
@@ -27,23 +38,43 @@ final class ExportArchiveXcodeProjectActionTests: XCTestCase {
             scheme: "IntegrationApp")
     }
 
+    override func setUp() async throws {
+        try await super.setUp()
+
+        // add provisioning profile
+        let action = AddProvisioningProfileAction(provisioningProfilePath: provisioningProfilePath)
+        try await action.run()
+    }
+
     override func tearDownWithError() throws {
         try super.tearDownWithError()
         try fileManager.removeItem(atPath: testDirectory)
         try fileManager.removeItem(atPath: archivePath)
+        try fileManager.removeItem(at: provisioningProfilePath)
     }
 
     func test_exportArchive_whenGivenExportOptionsPlistPath() async throws {
+        // Archive project
+        let buildAction = BuildXcodeProjectAction(
+            project: project,
+            buildConfiguration: .release,
+            cleanBuild: true,
+            archivePath: archivePath,
+            projectVersion: "1.0.0"
+        )
+
+        let buildResult = try await buildAction.run()
+        print(buildResult.output)
+        XCTAssertEqual(buildResult.terminationStatus, 0)
+        XCTAssertTrue(buildResult.output.lowercased().contains("archive succeeded"))
 
         try! fileManager.createDirectory(atPath: testDirectory, withIntermediateDirectories: true)
-
-        let tempDirectory = NSTemporaryDirectory()
 
         let action = ExportArchiveXcodeProjectAction(
             project: project,
             archivePath: archivePath,
             exportPath: testDirectory,
-            exportOptionsPlistPath: "\(tempDirectory)ExportOptions.plist"
+            exportOptionsPlistPath: "\(tempDirectory)/ExportOptions.plist"
         )
 
         let result = try await action.run()
