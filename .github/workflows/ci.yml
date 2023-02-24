@@ -30,7 +30,7 @@ jobs:
           echo "${{ secrets.EXPORT_OPTIONS_PLIST }}" > $TEMP_DIR/ExportOptions.plist
       - name: Create Provisoning Profile
         run: |
-          echo "Creating Proviosing Profile"
+          echo "Creating Provisioning Profile"
           echo "${{ secrets.PROVISIONING_PROFILE }}" > $TEMP_DIR/seedee_provisoning_profile.obileprovisioning
       - name: Run Unit Tests
         run: swift test -v
