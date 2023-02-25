@@ -36,3 +36,4 @@ jobs:
         run: swift test -v
         env:
           SHOULD_SETUP_COCOAPODS: 1
+          SETUP_PROVISIONING_PROFILE: 1
