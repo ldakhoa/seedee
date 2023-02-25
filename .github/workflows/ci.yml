@@ -31,11 +31,11 @@ jobs:
       - name: Create and install Provisoning Profile
         run: |
           echo "Creating Provisioning Profile"
-          echo $PROVISIONING_PROFILE | base64 --decode > $TEMP_DIR/seedee_provisoning_profile.mobileprovision
+          echo $PROVISIONING_PROFILE | base64 --decode > $TEMP_DIR/seedee_provisioning_profile.mobileprovision
       - name: Run Unit Tests
         run: swift test -v
         env:
           SHOULD_SETUP_COCOAPODS: 1
           SETUP_PROVISIONING_PROFILE: 1
-          SKIP_UNIT_TEST: 1
+          SKIP_UNIT_TEST: 0
           PROVISIONING_PROFILE: ${{ secrets.PROVISIONING_PROFILE }}
