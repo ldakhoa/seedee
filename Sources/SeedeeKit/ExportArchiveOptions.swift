@@ -353,7 +353,7 @@ extension ExportArchiveOptions {
 
     /// The method used to export the archive.
     public enum Method: String, Encodable {
-        case adHoc = "ah-hoc"
+        case adHoc = "ad-hoc"
         case package
         case enterprise
         case development

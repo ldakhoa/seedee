@@ -129,6 +129,7 @@ struct ExportArchiveXcodeProjectAction: Action {
             .append("-archivePath", value: archivePath)
             .append("-exportOptionsPlist", value: exportOptionsPlistPath)
             .append("-allowProvisioningUpdates", flag: allowProvisioningUpdates)
+            .append("-exportPath", value: exportPath)
 
         if let appStoreConnectKey = appStoreConnectKey {
             commandBuilder
