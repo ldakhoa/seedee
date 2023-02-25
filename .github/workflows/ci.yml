@@ -31,7 +31,7 @@ jobs:
       - name: Create and install Provisoning Profile
         run: |
           echo "Creating Provisioning Profile"
-          echo $PROVISIONING_PROFILE | base64 --decode > $TEMP_DIR/seedee_provisoning_profile.mobileprovisioning
+          echo $PROVISIONING_PROFILE | base64 --decode > $TEMP_DIR/seedee_provisoning_profile.mobileprovision
       - name: Run Unit Tests
         run: swift test -v
         env:
