@@ -18,3 +18,12 @@ extension XCTest {
         fixturePath(for: "IntegrationApp")
     }
 }
+
+extension XCTest {
+    var skipUnitTest: Bool {
+        if let value = ProcessInfo.processInfo.environment["SKIP_UNIT_TEST"], !value.isEmpty {
+            return true
+        }
+        return false
+    }
+}

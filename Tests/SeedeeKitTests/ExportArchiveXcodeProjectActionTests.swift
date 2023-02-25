@@ -37,6 +37,7 @@ final class ExportArchiveXcodeProjectActionTests: XCTestCase {
     override func setUp() {
         super.setUp()
 
+        try! XCTSkipUnless(skipUnitTest)
         testDirectory = "\(tempDirectory!)/ExportArchiveXcodeProjectActionTests/"
         archivePath = "\(tempDirectory!)/ExportArchiveXcodeProjectActionTests.xcarchive"
 

@@ -37,4 +37,5 @@ jobs:
         env:
           SHOULD_SETUP_COCOAPODS: 1
           SETUP_PROVISIONING_PROFILE: 1
+          SKIP_UNIT_TEST: 1
           PROVISIONING_PROFILE: ${{ secrets.PROVISIONING_PROFILE }}
