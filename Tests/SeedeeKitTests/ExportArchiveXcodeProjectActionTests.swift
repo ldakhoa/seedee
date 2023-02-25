@@ -78,7 +78,6 @@ final class ExportArchiveXcodeProjectActionTests: XCTestCase {
         )
 
         let buildResult = try await buildAction.run()
-        print(buildResult.output)
         XCTAssertEqual(buildResult.terminationStatus, 0)
         XCTAssertTrue(buildResult.output.lowercased().contains("archive succeeded"))
 
@@ -92,7 +91,6 @@ final class ExportArchiveXcodeProjectActionTests: XCTestCase {
         )
 
         let result = try await action.run()
-        print(result.output)
         XCTAssertEqual(result.terminationStatus, 0)
         XCTAssertTrue(result.output.lowercased().contains("export succeeded"))
     }
