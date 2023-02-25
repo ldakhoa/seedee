@@ -81,7 +81,7 @@ final class ExportArchiveXcodeProjectActionTests: XCTestCase {
         XCTAssertEqual(buildResult.terminationStatus, 0)
         XCTAssertTrue(buildResult.output.lowercased().contains("archive succeeded"))
 
-        try! fileManager.createDirectory(atPath: testDirectory, withIntermediateDirectories: true)
+        try fileManager.createDirectory(atPath: testDirectory, withIntermediateDirectories: true)
 
         let action = ExportArchiveXcodeProjectAction(
             project: project,
