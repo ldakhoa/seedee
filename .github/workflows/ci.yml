@@ -19,19 +19,22 @@ jobs:
         run: swiftlint --strict
       - name: Build Package
         run: swift build -v
-      - name: Create temporary directory
-        id: create-temp-dir
+      - name: Set temporary to use in Unit Test
+        id: set-temp-dir
         run: |
-          temp_dir=$(mktemp -d)
-          echo "TEMP_DIR=$temp_dir" >> $GITHUB_ENV
-      - name: Create ExportOptions.plist file
+          echo "TEMP_DIR=$RUNNER_TEMP" >> $GITHUB_ENV
+      - name: Create ExportOptions.plist file that supports Unit Test
         run: |
           echo "Creating ExportOptions.plist"
           echo "${{ secrets.EXPORT_OPTIONS_PLIST }}" > $TEMP_DIR/ExportOptions.plist
       - name: Create and install Provisoning Profile
         run: |
-          echo "Creating Provisioning Profile"
-          echo $PROVISIONING_PROFILE | base64 --decode > $TEMP_DIR/seedee_provisioning_profile.mobileprovision
+          # create variables
+          PP_PATH=$TEMP_DIR/build_pp_unit_test.mobileprovision
+
+          # import certificate and provisioning profile from secrets
+          echo "Creating Provisioning Profile from $PP_PATH"
+          echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode -o $PP_PATH
       - name: Run Unit Tests
         run: swift test -v
         env:
@@ -39,3 +42,4 @@ jobs:
           SETUP_PROVISIONING_PROFILE: 1
           SKIP_UNIT_TEST: 0
           PROVISIONING_PROFILE: ${{ secrets.PROVISIONING_PROFILE }}
+          BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
