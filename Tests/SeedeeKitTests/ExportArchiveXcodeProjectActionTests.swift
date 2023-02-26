@@ -69,7 +69,10 @@ final class ExportArchiveXcodeProjectActionTests: XCTestCase {
 
             // add provisioning profile
             let action = AddProvisioningProfileAction(provisioningProfilePath: provisioningProfilePath)
-            try await action.run()
+
+            // remove print debug after pass CI test
+            let provisioningProfile = try await action.run()
+            print("Provisioning info: ", provisioningProfile.uuid, provisioningProfile.name)
         }
     }
 
