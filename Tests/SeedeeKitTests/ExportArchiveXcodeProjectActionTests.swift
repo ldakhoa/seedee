@@ -59,8 +59,8 @@ final class ExportArchiveXcodeProjectActionTests: XCTestCase {
 
         if setupProvisioningProfile {
             guard
-                let provisioningProfilePath,
-                let provisioningProfileBase64,
+                let provisioningProfilePath = provisioningProfilePath,
+                let provisioningProfileBase64 = provisioningProfileBase64,
                 let decodedData = Data(base64Encoded: provisioningProfileBase64)
             else {
                 fatalError("Failed to decoded data at \(String(describing: self.provisioningProfilePath?.path))")
