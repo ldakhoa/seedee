@@ -16,6 +16,10 @@
 - [ ] Set build number
 - [ ] Increment build number
 
+## Command Line
+
+- [ ] Build & Deploy command
+- [ ] Trigger to run actions
 
 ## Notifications for results
 
