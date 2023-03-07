@@ -34,10 +34,17 @@ final class ExportArchiveXcodeProjectActionTests: XCTestCase {
         return nil
     }
 
+    private var provisioningProfileBase64: String? {
+        if let value = ProcessInfo.processInfo.environment["PROVISIONING_PROFILE"], !value.isEmpty {
+            return value
+        }
+
+        return nil
+    }
+
     override func setUp() {
         super.setUp()
 
-        try! XCTSkipUnless(skipUnitTest)
         testDirectory = "\(tempDirectory!)/ExportArchiveXcodeProjectActionTests/"
         archivePath = "\(tempDirectory!)/ExportArchiveXcodeProjectActionTests.xcarchive"
 
@@ -50,10 +57,22 @@ final class ExportArchiveXcodeProjectActionTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
 
-        if setupProvisioningProfile, let provisioningProfilePath {
+        if setupProvisioningProfile {
+            guard
+                let provisioningProfilePath = provisioningProfilePath,
+                let provisioningProfileBase64 = provisioningProfileBase64,
+                let decodedData = Data(base64Encoded: provisioningProfileBase64)
+            else {
+                fatalError("Failed to decoded data at \(String(describing: self.provisioningProfilePath?.path))")
+            }
+            fileManager.createFile(atPath: provisioningProfilePath.path, contents: decodedData)
+
             // add provisioning profile
             let action = AddProvisioningProfileAction(provisioningProfilePath: provisioningProfilePath)
-            try await action.run()
+
+            // remove print debug after pass CI test
+            let provisioningProfile = try await action.run()
+            print("Provisioning info: ", provisioningProfile.uuid, provisioningProfile.name)
         }
     }
 

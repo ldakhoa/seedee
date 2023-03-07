@@ -6,7 +6,6 @@ final class BuildXcodeProjectActionTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
 
-        try XCTSkipUnless(skipUnitTest)
         if shouldSetUpCocoaPods {
             let action = ShellAction(
                 commandBuilder: CommandBuilder("bundle install && bundle exec pod install"),
