@@ -1,4 +1,3 @@
-```swift
 import Foundation
 
 public struct BuildSettings {

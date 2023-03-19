@@ -103,6 +103,47 @@ public struct UploadToAppStoreConnectAction: Action {
     /// Builds the command to upload the IPA file to App Store Connect using the `altool` command-line tool.
     /// - Returns: A `CommandBuilder` instance.
     public func buildCommand() async throws -> CommandBuilder {
+        var bundleVersion = self.bundleVersion
+        var bundleShortVersion = self.bundleShortVersion
+        var bundleID = self.bundleID
+
+        versions: if bundleShortVersion == nil || bundleShortVersion == nil || bundleID == nil {
+            guard let buildSettings = try? await showBuildSettings(
+                fromXcodeProjectPath: project?.projectPath ?? "",
+                scheme: project?.scheme
+            ) else {
+                logger.debug("Couldn't get build settings from Xcode project.")
+                break versions
+            }
+
+            if bundleShortVersion == nil {
+                if let projectBundleShortVersion = buildSettings[""] {
+                    bundleShortVersion = projectBundleShortVersion
+                    logger.debug("Detected bundle short version from xcode project: \(projectBundleShortVersion)")
+                } else {
+                    logger.debug("Couldn't detect bundle short version from Xcode project build settings.")
+                }
+            }
+
+            if bundleVersion == nil {
+                if let projectBundleVersion = buildSettings[""] {
+                    bundleVersion = projectBundleVersion
+                    logger.debug("Detected bundle version from xcode project: \(projectBundleVersion)")
+                } else {
+                    logger.debug("Couldn't detect bundle version from Xcode project build settings.")
+                }
+            }
+
+            if bundleID == nil {
+                if let projectBundleID = buildSettings[""] {
+                    bundleID = projectBundleID
+                    logger.debug("Detected bundle id from xcode project: \(projectBundleID)")
+                } else {
+                    logger.debug("Couldn't detect bundle id from Xcode project build settings.")
+                }
+            }
+        }
+
         guard let bundleVersion else {
             throw Error.missingBundleVersion
         }
