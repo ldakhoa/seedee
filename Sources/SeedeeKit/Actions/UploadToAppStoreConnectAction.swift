@@ -117,7 +117,7 @@ public struct UploadToAppStoreConnectAction: Action {
             }
 
             if bundleShortVersion == nil {
-                if let projectBundleShortVersion = buildSettings[""] {
+                if let projectBundleShortVersion = buildSettings["MARKETING_VERSION"] {
                     bundleShortVersion = projectBundleShortVersion
                     logger.debug("Detected bundle short version from xcode project: \(projectBundleShortVersion)")
                 } else {
@@ -126,7 +126,7 @@ public struct UploadToAppStoreConnectAction: Action {
             }
 
             if bundleVersion == nil {
-                if let projectBundleVersion = buildSettings[""] {
+                if let projectBundleVersion = buildSettings["CURRENT_PROJECT_VERSION"] {
                     bundleVersion = projectBundleVersion
                     logger.debug("Detected bundle version from xcode project: \(projectBundleVersion)")
                 } else {
@@ -135,7 +135,7 @@ public struct UploadToAppStoreConnectAction: Action {
             }
 
             if bundleID == nil {
-                if let projectBundleID = buildSettings[""] {
+                if let projectBundleID = buildSettings["PRODUCT_BUNDLE_IDENTIFIER"] {
                     bundleID = projectBundleID
                     logger.debug("Detected bundle id from xcode project: \(projectBundleID)")
                 } else {
