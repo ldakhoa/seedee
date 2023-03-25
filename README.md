@@ -4,6 +4,8 @@
 
 Seedee is a Continuous Integration and Continuous Deployment (CI/CD) tool written in Swift that simplifies and automates the app distribution process for iOS and macOS applications. Seedee automates tasks like building, testing, and deploying, and supports various integrations like Git, Xcode among others.
 
+This product is highly inspired by [Scipio](https://github.com/giginet/Scipio) and [swift-ci](https://github.com/clayellis/swift-ci)
+
 ## Installation
 
 SPM, brew, bundle, GitHub Action...
