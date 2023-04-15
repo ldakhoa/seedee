@@ -1,4 +1,5 @@
 import Foundation
+import Logging
 
 public protocol Action<Output> {
     associatedtype Output
@@ -21,6 +22,7 @@ public extension Action {
 public extension Action {
     @discardableResult
     func action<A: Action>(_ action: A) async throws -> A.Output {
+        LoggingSystem.bootstrap()
         let output = try await action.run()
         return output
     }
