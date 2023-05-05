@@ -40,7 +40,7 @@ public struct BuildSettings {
                 let value = String(line[delimeterRange.upperBound...])
                 return (key, value)
             }
-        let settings = Dictionary(pairs) { first, second in
+        let settings = Dictionary(pairs) { first, _ in
             first
         }
         self.init(settings: settings)
