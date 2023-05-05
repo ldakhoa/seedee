@@ -16,6 +16,8 @@ public struct UploadToAppStoreConnectAction: Action {
         case missingBundleVersion
         case missingBundleShortVersion
         case missingBundleID
+        case appNotFound(bundleID: String)
+        case missingAppAppleID
 
         var errorDescription: String? {
             switch self {
@@ -25,6 +27,14 @@ public struct UploadToAppStoreConnectAction: Action {
                 return "Missing bundle short version"
             case .missingBundleID:
                 return "Missing bundle ID"
+            case let .appNotFound(bundleID):
+                return """
+Failed to find an app with the provided bundle id \(bundleID) on App Store Connect.
+Please verify that the bundle id is correct and ensure that the app has been created on App Store Connect.
+If the problem persists, please check your account permissions or contact Apple Developer Support for assistance.
+"""
+            case .missingAppAppleID:
+                return "Missing App Apple ID"
             }
         }
     }
@@ -59,6 +69,8 @@ public struct UploadToAppStoreConnectAction: Action {
     let appStoreConnectKey: APIConfiguration.Key
 
     // MARK: - Misc
+
+    private let provider: APIProvider
 
     /// The executor used to run the `altool` command.
     let executor: any Executor
@@ -96,6 +108,11 @@ public struct UploadToAppStoreConnectAction: Action {
         self.bundleShortVersion = bundleShortVersion
         self.appStoreConnectKey = appStoreConnectKey
         self.executor = executor
+        self.provider = APIProvider(configuration: APIConfiguration(
+            issuerID: appStoreConnectKey.issuerID,
+            privateKeyID: appStoreConnectKey.privateKeyID,
+            privateKey: appStoreConnectKey.privateKey)
+        )
     }
 
     // MARK: - Action
@@ -103,46 +120,47 @@ public struct UploadToAppStoreConnectAction: Action {
     /// Builds the command to upload the IPA file to App Store Connect using the `altool` command-line tool.
     /// - Returns: A `CommandBuilder` instance.
     public func buildCommand() async throws -> CommandBuilder {
+        var appAppleID = self.appAppleID
         var bundleVersion = self.bundleVersion
         var bundleShortVersion = self.bundleShortVersion
         var bundleID = self.bundleID
 
-        versions: if bundleShortVersion == nil || bundleShortVersion == nil || bundleID == nil {
-            guard let buildSettings = try? await showBuildSettings(
-                fromXcodeProjectPath: project?.projectPath ?? "",
-                scheme: project?.scheme
-            ) else {
-                logger.debug("Couldn't get build settings from Xcode project.")
-                break versions
-            }
+    versions: if bundleShortVersion == nil || bundleShortVersion == nil || bundleID == nil {
+        guard let buildSettings = try? await showBuildSettings(
+            fromXcodeProjectPath: project?.projectPath ?? "",
+            scheme: project?.scheme
+        ) else {
+            logger.debug("Couldn't get build settings from Xcode project.")
+            break versions
+        }
 
-            if bundleShortVersion == nil {
-                if let projectBundleShortVersion = buildSettings["MARKETING_VERSION"] {
-                    bundleShortVersion = projectBundleShortVersion
-                    logger.debug("Detected bundle short version from xcode project: \(projectBundleShortVersion)")
-                } else {
-                    logger.debug("Couldn't detect bundle short version from Xcode project build settings.")
-                }
-            }
-
-            if bundleVersion == nil {
-                if let projectBundleVersion = buildSettings["CURRENT_PROJECT_VERSION"] {
-                    bundleVersion = projectBundleVersion
-                    logger.debug("Detected bundle version from xcode project: \(projectBundleVersion)")
-                } else {
-                    logger.debug("Couldn't detect bundle version from Xcode project build settings.")
-                }
-            }
-
-            if bundleID == nil {
-                if let projectBundleID = buildSettings["PRODUCT_BUNDLE_IDENTIFIER"] {
-                    bundleID = projectBundleID
-                    logger.debug("Detected bundle id from xcode project: \(projectBundleID)")
-                } else {
-                    logger.debug("Couldn't detect bundle id from Xcode project build settings.")
-                }
+        if bundleShortVersion == nil {
+            if let projectBundleShortVersion = buildSettings["MARKETING_VERSION"] {
+                bundleShortVersion = projectBundleShortVersion
+                logger.debug("Detected bundle short version from xcode project: \(projectBundleShortVersion)")
+            } else {
+                logger.debug("Couldn't detect bundle short version from Xcode project build settings.")
             }
         }
+
+        if bundleVersion == nil {
+            if let projectBundleVersion = buildSettings["CURRENT_PROJECT_VERSION"] {
+                bundleVersion = projectBundleVersion
+                logger.debug("Detected bundle version from xcode project: \(projectBundleVersion)")
+            } else {
+                logger.debug("Couldn't detect bundle version from Xcode project build settings.")
+            }
+        }
+
+        if bundleID == nil {
+            if let projectBundleID = buildSettings["PRODUCT_BUNDLE_IDENTIFIER"] {
+                bundleID = projectBundleID
+                logger.debug("Detected bundle id from xcode project: \(projectBundleID)")
+            } else {
+                logger.debug("Couldn't detect bundle id from Xcode project build settings.")
+            }
+        }
+    }
 
         guard let bundleVersion else {
             throw Error.missingBundleVersion
@@ -156,11 +174,34 @@ public struct UploadToAppStoreConnectAction: Action {
             throw Error.missingBundleShortVersion
         }
 
+        do {
+            let request = APIEndpoint
+                .v1
+                .apps
+                .get()
+            let apps = try await self.provider.request(request).data
+            guard let app = apps.first(where: { $0.attributes?.bundleID == bundleID }) else {
+                throw Error.appNotFound(bundleID: bundleID)
+            }
+
+            if appAppleID == nil {
+                appAppleID = app.id
+                logger.info("Detected app Apple ID from App Store Connect: \(app.id)")
+            }
+        } catch {
+            logger.error("Failed to get apps from App Store Connect")
+        }
+
+        guard let appAppleID else {
+            throw Error.missingAppAppleID
+        }
+
         logger.info("Uploading \(ipaPath) to App Store Connect")
 
         return CommandBuilder("xcrun altool")
             .append("--upload-package", value: ipaPath)
             .append("--type", value: type.rawValue)
+            .append("--apple-id", value: appAppleID)
             .append("--apiKey", value: appStoreConnectKey.privateKeyID)
             .append("--apiIssuer", value: appStoreConnectKey.issuerID)
             .append("--bundle-version", value: bundleVersion)
