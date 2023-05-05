@@ -32,6 +32,12 @@ struct SelectXcodeVersionAction: Action {
     }
 
     func run() async throws -> ExecutorResult {
+        try self.checkIsInstalled { installed in
+            if !installed {
+                self.install()
+            }
+        }
+
         let command = try await buildCommand().command
         return try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<ExecutorResult, Swift.Error>) in
             executor.execute(command) { result in
@@ -41,6 +47,34 @@ struct SelectXcodeVersionAction: Action {
                 case let .failure(error):
                     logger.error("Unable to select xcode version \(error.message)")
                     continuation.resume(throwing: error)
+                }
+            }
+        }
+    }
+
+    // MARK: - Side Effects - Private
+
+    private func checkIsInstalled(completion: @escaping (Bool) -> Void) throws {
+        do {
+            executor.execute("which xcversion") { result in
+                switch result {
+                case let .success(success):
+                    completion(!success.output.contains("not found"))
+                case .failure:
+                    completion(false)
+                }
+            }
+        }
+    }
+
+    private func install() {
+        do {
+            executor.execute("gem install xcode-install") { result in
+                switch result {
+                case .success:
+                    logger.info("Succeeded install xcode-install")
+                case let .failure(failure):
+                    logger.error(failure.output)
                 }
             }
         }
