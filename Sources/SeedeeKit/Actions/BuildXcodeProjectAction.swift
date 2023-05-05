@@ -41,17 +41,19 @@ struct BuildXcodeProjectAction: Action {
     @discardableResult
     func run() async throws -> ExecutorResult {
         let buildCommand = try await buildCommand().command
-        return try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<ExecutorResult, Swift.Error>) in
-            executor.execute(buildCommand, workingDirectory: project.workingDirectory) { result in
-                switch result {
-                case let .success(executorResult):
-                    continuation.resume(returning: executorResult)
-                case let .failure(error):
-                    logger.error("Unable to run `buildXcodeProjectAction` \(error.message)")
-                    continuation.resume(throwing: error)
-                }
-            }
-        }
+
+//        return try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<ExecutorResult, Swift.Error>) in
+//            executor.execute(buildCommand, workingDirectory: project.workingDirectory) { result in
+//                switch result {
+//                case let .success(executorResult):
+//                    continuation.resume(returning: executorResult)
+//                case let .failure(error):
+//                    logger.error("Unable to run `buildXcodeProjectAction` \(error.message)")
+//                    continuation.resume(throwing: error)
+//                }
+//            }
+//        }
+        return try await executor.execute(buildCommand, workingDirectory: project.workingDirectory)
     }
 
     func buildCommand() async throws -> CommandBuilder {
