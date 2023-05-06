@@ -6,29 +6,26 @@ protocol Executor {
     ///   - command: The command to run.
     ///   - arguments: The arguments to execute.
     ///   - workingDirectory: The path to the directory under which to run the process.
-    ///   - completion:
-    ///   - completion: A completion to be fulfilled with a result is `ExecutorResult`.
+    /// - Returns: A future that will be fulfilled with a result is `ExecutorResult`.
     func execute(
         _ command: String,
         arguments: [String],
         workingDirectory: URL,
-        process: Process,
-        completion: @escaping (Result<ExecutorResult, ExecutorError>) -> Void
-    )
+        process: Process
+    ) async throws -> ExecutorResult
 }
 
 extension Executor {
     func execute(
         _ command: String,
-        workingDirectory: URL = URL(fileURLWithPath: "."),
-        completion: @escaping (Result<ExecutorResult, ExecutorError>) -> Void
-    ) {
-        execute(
+        workingDirectory: URL = URL(fileURLWithPath: ".")
+    ) async throws -> ExecutorResult {
+        try await self.execute(
             command,
             arguments: [],
             workingDirectory: workingDirectory,
-            process: .init(),
-            completion: completion)
+            process: .init()
+        )
     }
 }
 
@@ -62,13 +59,21 @@ struct ProcessExecutor: Executor {
         _ command: String,
         arguments: [String],
         workingDirectory: URL,
-        process: Process,
-        completion: @escaping (Result<ExecutorResult, ExecutorError>) -> Void
-    ) {
-        let command = "cd \(workingDirectory.path.escapingSpaces) && \(command) \(arguments.joined(separator: " "))"
+        process: Process
+    ) async throws -> ExecutorResult {
+        return try await withCheckedThrowingContinuation { continuation in
+            let command = "cd \(workingDirectory.path.escapingSpaces) && \(command) \(arguments.joined(separator: " "))"
 
-        logger.info("$ \(command)")
-        process.run(with: command, completion: completion)
+            logger.info("$ \(command)")
+            process.run(with: command) { result in
+                switch result {
+                case .success(let executorResult):
+                    continuation.resume(returning: executorResult)
+                case .failure(let executorError):
+                    continuation.resume(throwing: executorError)
+                }
+            }
+        }
     }
 }
 

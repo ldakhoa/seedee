@@ -19,17 +19,7 @@ struct ShellAction: Action {
 
     @discardableResult
     func run() async throws -> ExecutorResult {
-        return try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<ExecutorResult, Swift.Error>) in
-            executor.execute(commandBuilder.command, workingDirectory: workingDirectory) { result in
-                switch result {
-                case let .success(executorResult):
-                    continuation.resume(returning: executorResult)
-                case let .failure(error):
-                    logger.error("Unable to run `shellAction` \(error.message)")
-                    continuation.resume(throwing: error)
-                }
-            }
-        }
+        return try await executor.execute(commandBuilder.command, workingDirectory: workingDirectory)
     }
 }
 
