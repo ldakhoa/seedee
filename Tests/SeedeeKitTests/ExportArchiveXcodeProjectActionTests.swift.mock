@@ -53,9 +53,6 @@ final class ExportArchiveXcodeProjectActionTests: XCTestCase {
     }
 
     override func setUp() async throws {
-        #warning("Fix - Make it work on CI pipeline")
-        try XCTSkipUnless(false)
-
         try await super.setUp()
 
         if setupProvisioningProfile {
@@ -88,6 +85,8 @@ final class ExportArchiveXcodeProjectActionTests: XCTestCase {
     }
 
     func test_exportArchive_whenGivenExportOptionsPlistPath() async throws {
+        try XCTSkipUnless(false)
+
         // Archive project
         let buildAction = BuildXcodeProjectAction(
             project: project,
