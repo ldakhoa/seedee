@@ -30,6 +30,12 @@ jobs:
         run: |
           echo "Creating ExportOptions.plist"
           echo "${{ secrets.EXPORT_OPTIONS_PLIST }}" > $TEMP_DIR/ExportOptions.plist
+      - name: Setup Git
+        if: env.PULL_REQUEST == '1'
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
+          git fetch origin ${{ github.base_ref }}
       - name: Check for changes in Test files
         if: env.PULL_REQUEST == '1'
         run: |
