@@ -39,9 +39,6 @@ If the problem persists, please check your account permissions or contact Apple 
         }
     }
 
-    /// The output of the action.
-    public struct Output {}
-
     // MARK: - Dependencies
 
     /// The path of the IPA file to be uploaded.
@@ -209,10 +206,8 @@ If the problem persists, please check your account permissions or contact Apple 
             .append("--bundle-short-version-string", value: bundleShortVersion)
     }
 
-    /// Runs the action.
-    /// - Returns: An instance of `Output`.
-    public func run() async throws -> Output {
-        return Output()
+    public func run() async throws -> ExecutorResult {
+        try await executor.execute(buildCommand().command)
     }
 }
 
