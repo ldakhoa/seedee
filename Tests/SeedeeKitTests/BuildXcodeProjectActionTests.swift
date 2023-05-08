@@ -31,11 +31,13 @@ final class BuildXcodeProjectActionTests: XCTestCase {
         let action = BuildXcodeProjectAction(
             project: project,
             buildConfiguration: .debug,
-            cleanBuild: true
+            cleanBuild: true,
+            projectVersion: "1.0.0"
         )
 
         let result = try await action.run()
         XCTAssertEqual(result.terminationStatus, 0)
+        XCTAssertFalse(result.output.contains("GenerateDSYMFile"))
     }
 
     func test_buildXcodeProject_buildShouldFail() async throws {
@@ -92,5 +94,45 @@ final class BuildXcodeProjectActionTests: XCTestCase {
 
         XCTAssertEqual(result.terminationStatus, 0)
         XCTAssertTrue(result.output.contains("** TEST BUILD SUCCEEDED **"))
+    }
+
+    func test_buildXcodeProject_includeDSYMsIsTrue() async throws {
+        let project = Project(
+            workingDirectory: integrationAppPath,
+            projectPath: "IntegrationApp.xcodeproj",
+            scheme: "IntegrationApp")
+
+        let action = BuildXcodeProjectAction(
+            project: project,
+            buildConfiguration: .debug,
+            cleanBuild: true,
+            includeDSYMs: true
+        )
+
+        let result = try await action.run()
+
+        XCTAssertEqual(result.terminationStatus, 0)
+        XCTAssertTrue(result.output.lowercased().contains("build succeeded"))
+
+        // only true if clean build
+        XCTAssertTrue(result.output.contains("GenerateDSYMFile"))
+    }
+
+    func test_buildXcodeProject_includeDSYMsIsFalse() async throws {
+        let project = Project(
+            workingDirectory: integrationAppPath,
+            projectPath: "IntegrationApp.xcodeproj",
+            scheme: "IntegrationApp")
+
+        let action = BuildXcodeProjectAction(
+            project: project,
+            buildConfiguration: .debug,
+            includeDSYMs: false
+        )
+
+        let result = try await action.run()
+        XCTAssertEqual(result.terminationStatus, 0)
+        XCTAssertTrue(result.output.lowercased().contains("build succeeded"))
+        XCTAssertFalse(result.output.contains("GenerateDSYMFile"))
     }
 }
