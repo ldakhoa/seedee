@@ -43,7 +43,6 @@ public struct BuildSettings {
             .append("-configuration", value: buildConfiguration?.settingsValue)
             .append("-skipUnavailableActions")
 
-        // TODO: Avoid force unwrap optional
         let shellAction = ShellAction(commandBuilder: command, workingDirectory: workingDirectory)
         let output = try await shellAction.run().output
         self.init(buildSettingsOutput: output)
