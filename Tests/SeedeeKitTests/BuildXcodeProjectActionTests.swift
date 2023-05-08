@@ -114,7 +114,7 @@ final class BuildXcodeProjectActionTests: XCTestCase {
         XCTAssertEqual(result.terminationStatus, 0)
         XCTAssertTrue(result.output.lowercased().contains("build succeeded"))
 
-        // TODO: Should check if contains `AppName.app.dSYM`
+        // only true if clean build
         XCTAssertTrue(result.output.contains("GenerateDSYMFile"))
     }
 
@@ -133,8 +133,6 @@ final class BuildXcodeProjectActionTests: XCTestCase {
         let result = try await action.run()
         XCTAssertEqual(result.terminationStatus, 0)
         XCTAssertTrue(result.output.lowercased().contains("build succeeded"))
-
-        // TODO: Should check if contains `AppName.app.dSYM`
         XCTAssertFalse(result.output.contains("GenerateDSYMFile"))
     }
 }

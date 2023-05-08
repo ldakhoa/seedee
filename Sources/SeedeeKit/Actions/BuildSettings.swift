@@ -20,12 +20,19 @@ public struct BuildSettings {
     /// - Parameters:
     ///   - xcodeProjectPath: The path to the Xcode project.
     ///   - scheme: The scheme to use for build settings. If `scheme` is not specified, the default scheme is used.
-    public init(xcodeProjectPath: String, scheme: String? = nil) async throws {
+    public init(
+        xcodeProjectPath: String,
+        scheme: String? = nil,
+        workingDirectory: URL? = nil,
+        buildConfiguration: BuildOptions.BuildConfiguration? = nil
+    ) async throws {
         let command = CommandBuilder("xcodebuild")
             .append("-project", value: xcodeProjectPath)
             .append("-scheme", value: scheme)
             .append("-showBuildSettings")
-        let shellAction = ShellAction(commandBuilder: command)
+            .append("-configuration", value: buildConfiguration?.settingsValue)
+        // TODO: Avoid force unwrap optional
+        let shellAction = ShellAction(commandBuilder: command, workingDirectory: workingDirectory!)
         let output = try await shellAction.run().output
         self.init(buildSettingsOutput: output)
     }
