@@ -2,7 +2,7 @@ import Foundation
 
 public struct BuildSettings {
     /// All build settings given at intialization.
-    let settings: [String: String]
+    private let settings: [String: String]
 
     enum Error: Swift.Error, LocalizedError {
         case missingBuildSetting(key: String)
@@ -20,19 +20,30 @@ public struct BuildSettings {
     /// - Parameters:
     ///   - xcodeProjectPath: The path to the Xcode project.
     ///   - scheme: The scheme to use for build settings. If `scheme` is not specified, the default scheme is used.
+    ///   - workingDirectory: The working directory URL.
+    ///   - buildConfiguration: The build configuration to use while building the project. Default: nil.
     public init(
         xcodeProjectPath: String,
         scheme: String? = nil,
-        workingDirectory: URL? = nil,
+        workingDirectory: URL,
         buildConfiguration: BuildOptions.BuildConfiguration? = nil
     ) async throws {
-        let command = CommandBuilder("xcodebuild")
+        // xcodebuild (in Xcode 8.0) has a bug where xcodebuild -showBuildSettings
+        // can hang indefinitely on projects that contain core data models.
+        // rdar://27052195
+        // Including the action "clean" works around this issue, which is further
+        // discussed here: https://forums.developer.apple.com/thread/50372
+        //
+        // "archive" also works around the issue above so use it to determine if
+        // it is configured for the archive action.
+        let command = CommandBuilder("xcodebuild archive")
             .append("-project", value: xcodeProjectPath)
             .append("-scheme", value: scheme)
             .append("-showBuildSettings")
             .append("-configuration", value: buildConfiguration?.settingsValue)
-        // TODO: Avoid force unwrap optional
-        let shellAction = ShellAction(commandBuilder: command, workingDirectory: workingDirectory!)
+            .append("-skipUnavailableActions")
+
+        let shellAction = ShellAction(commandBuilder: command, workingDirectory: workingDirectory)
         let output = try await shellAction.run().output
         self.init(buildSettingsOutput: output)
     }
@@ -71,10 +82,19 @@ public extension Action {
     /// - Parameters:
     ///   - path: The path to the Xcode project.
     ///   - scheme: The scheme to use for build settings. If `scheme` is not specified, the default scheme is used.
+    ///   - workingDirectory: The working directory URL.
+    ///   - buildConfiguration: The build configuration to use while building the project. Default: nil.
     func showBuildSettings(
         fromXcodeProjectPath path: String,
-        scheme: String? = nil
+        scheme: String? = nil,
+        workingDirectory: URL,
+        buildConfiguration: BuildOptions.BuildConfiguration? = nil
     ) async throws -> BuildSettings {
-        try await BuildSettings(xcodeProjectPath: path, scheme: scheme)
+        try await BuildSettings(
+            xcodeProjectPath: path,
+            scheme: scheme,
+            workingDirectory: workingDirectory,
+            buildConfiguration: buildConfiguration
+        )
     }
 }

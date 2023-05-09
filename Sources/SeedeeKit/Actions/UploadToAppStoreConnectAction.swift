@@ -125,7 +125,8 @@ If the problem persists, please check your account permissions or contact Apple 
     versions: if bundleShortVersion == nil || bundleShortVersion == nil || bundleID == nil {
         guard let buildSettings = try? await showBuildSettings(
             fromXcodeProjectPath: project?.projectPath ?? "",
-            scheme: project?.scheme
+            scheme: project?.scheme,
+            workingDirectory: project?.workingDirectory ?? URL(fileURLWithPath: ".")
         ) else {
             logger.debug("Couldn't get build settings from Xcode project.")
             break versions
